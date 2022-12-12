@@ -1,18 +1,15 @@
 <script setup lang="ts">
-import { inject } from 'vue';
 import BreadCrumb from '../components/BreadCrumb.vue';
-import Spinner from '../components/Spinner.vue';
-import type { App } from '../stores/app';
 
 const linksList = [{
+            link: '/',
             text: 'Главная страница'
+        }, {
+            text: 'Вход'
         }];
-
-const app = inject('app') as App;
 </script>
 
 <template>
     <BreadCrumb :linksList="linksList" />
-    <h1>Главная страница</h1>
-    <Spinner v-if="app.isRequest" />
+    <h1>Вход</h1>
 </template>
