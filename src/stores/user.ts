@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from 'pinia';
 
-interface User {
+export interface User {
     login: string;
     setData: Function;
     [index: string]: any;

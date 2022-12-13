@@ -56,6 +56,7 @@ loadingCatalog();
 <template>
     <BreadCrumb :linksList="linksList" />
     <h1>Каталог</h1>
+    
     <Spinner v-if="app.isRequest" />
     <template v-else>
         <FilmsTable />
