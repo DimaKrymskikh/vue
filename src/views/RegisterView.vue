@@ -22,7 +22,7 @@ const linksList = [{
 const app = inject('app') as App;
 const user = inject('user') as User;
 
-let inputLogin = ref('');
+const inputLogin = ref('');
 const login = computed(() => {
     let text = inputLogin.value;
     let isLogin = user.testLogin(text);
