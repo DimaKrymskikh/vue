@@ -6,14 +6,18 @@ interface RequestBody {
 
 /**
  * Оболочка над fetch
+ * @param {App} app
  * @param {String} url
  * @param {String} method
- * @param {String} body - Строка JSON
- * @param {Object} ob - Содержит список элементов, которые будут обновлены 
+ * @param {BodyInit | null} body - Строка JSON
+ * @param {Object} ob - Содержит список элементов, которые будут обновлены
+ * @param {Boolean} isSpinner - Нужно ли запускать большой спиннер
  * @returns {Object|Boolean}
  */
-export async function request(app: App, url: string, method: string, body: BodyInit | null, ob: RequestBody = {}) {
-    app.isRequest = true;
+export async function request(app: App, url: string, method: string, body: BodyInit | null, ob: RequestBody = {}, isSpinner = true) {
+    // Запускается большой спиннер только, если в этом есть необходимость
+    app.isRequest = true && isSpinner;
+    
     const response = await fetch(url, {
         method,
         headers: {

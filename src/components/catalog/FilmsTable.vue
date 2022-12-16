@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
+import CheckCircleSvg from '../../components/svg/CheckCircleSvg.vue';
+import PlusCircleSvg from '../../components/svg/PlusCircleSvg.vue';
+import { request } from '../../tools/request';
 import type { App } from '../../stores/app';
 import type { Films } from '../../stores/films';
 import type { Pagination } from '../../stores/pagination';
@@ -7,10 +10,53 @@ import type { Pagination } from '../../stores/pagination';
 const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
 const paginationCatalog = inject('paginationCatalog') as Pagination;
+
+const addCheck = 'visually-hidden';
+
+const requestAddFilm = async function(filmId: number) {
+    return await request(app, `${app.basicUrl}/userFilm/${filmId}`, 'POST',
+        JSON.stringify({
+            token: app.token,
+            aud: app.aud
+        }),
+        {},
+        false
+    );
+};
+
+const handlerAddFilm = async function(e: Event) {
+    const target = e.target as Element;
+    const targetParent = target.parentNode as Element;
+    const isTargetAddFilm = target.classList.contains("add-film");
+    const isTargetParentAddFilm = targetParent.classList.contains("add-film");
+    
+    let tag;
+    // Клик должен быть по картинке 'plus-circle.svg'
+    if (target && isTargetAddFilm) {
+        tag = target;
+    } else if (targetParent && isTargetParentAddFilm) {
+        tag = targetParent;
+    } else {
+        return;
+    }
+    
+    const tagParent = tag.parentNode as Element;
+    const checkCircle = tagParent.querySelector('.bi-check-circle') as Element;
+
+    const tagDataFilmId = tag.getAttribute('data-film-id') as unknown as number;
+    const spinner = tag.parentNode?.querySelector('.spinner-border') as Element;
+    tag.classList.add('visually-hidden');
+    spinner.classList.remove('visually-hidden');
+
+    if (await requestAddFilm(tagDataFilmId)) {
+        spinner.classList.add('visually-hidden');
+        checkCircle.classList.remove('visually-hidden');
+    }
+}
 </script>
 
 <template>
-<table id="films-table" class="table table-striped table-hover  caption-top table-bordered">
+<table id="films-table" class="table table-striped table-hover  caption-top table-bordered" @click="handlerAddFilm">
     <caption>Показано {{paginationCatalog.elementsNumberOnActivePage}} фильмов из {{paginationCatalog.itemsNumberTotal}}</caption>
     <thead>
         <tr>
@@ -36,11 +82,12 @@ const paginationCatalog = inject('paginationCatalog') as Pagination;
             <td>{{item.name}}</td>
             <template v-if="!app.isGuest">
                 <td v-if="item.isAvailable">
-                    <img src="@/assets/svg/check-circle.svg" alt="Домашняя страница" data-film-id="item.id">
+                    <CheckCircleSvg />
                 </td>
                 <td v-else>
                     <span class="spinner-border spinner-border-sm visually-hidden"></span>
-                    <img class="add-film" src="@/assets/svg/plus-circle.svg" alt="Домашняя страница" data-film-id="item.id">
+                    <PlusCircleSvg :filmId="item.id" />
+                    <CheckCircleSvg :class="addCheck" />
                 </td>
             </template>
         </tr>
