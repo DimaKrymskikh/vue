@@ -40,11 +40,12 @@ const paginationAccount = inject('paginationAccount') as Pagination;
                     <td>{{item.description}}</td>
                     <td>{{item.name}}</td>
                     <td>
-                        <img class="film-card"
-                            data-film-id="${item.id}"
-                            src="@/assets/svg/eye.svg"
-                            alt="Карточка фильма"
-                            title="Карточка фильма">
+                        <RouterLink :to="{name: 'filmCard', params: { filmId: item.id }}">
+                            <img
+                                src="@/assets/svg/eye.svg"
+                                alt="Карточка фильма"
+                                title="Карточка фильма">
+                        </Routerlink>
                     </td>
                     <td>
                         <img class="removal-film"

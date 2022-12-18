@@ -46,7 +46,7 @@ const filmsModel = function() {
         setData,
         setSortFilmTitle,
         setSortFilmDescription
-    }
+    };
 }
 
 export const filmsCatalogStore = defineStore("filmsCatalog", filmsModel);
