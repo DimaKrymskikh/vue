@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { inject } from 'vue';
 import { request } from '../../tools/request';
 import type { App } from '../../stores/app';
 import type { Films } from '../../stores/films';
@@ -8,8 +8,6 @@ import type { Pagination } from '../../stores/pagination';
 const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
 const paginationCatalog = inject('paginationCatalog') as Pagination;
-
-const addCheck = 'visually-hidden';
 
 const requestAddFilm = async function(filmId: number) {
     return await request(app, `${app.basicUrl}/userFilm/${filmId}`, 'POST',

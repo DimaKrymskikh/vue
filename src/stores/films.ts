@@ -19,7 +19,7 @@ export interface Films {
     setSortFilmDescription: Function;
 }
 
-export const useFilmsStore = defineStore("films", () => {
+const filmsModel = function() {
     // Массив объектов (список фильмов), свойства которых определяет сервер
     const films = ref([] as Array<Film>);
     // Фильтр по названию фильма
@@ -39,5 +39,15 @@ export const useFilmsStore = defineStore("films", () => {
         this.sortFilmDescription = text;
     };
     
-    return { films, sortFilmTitle, sortFilmDescription, setData, setSortFilmTitle, setSortFilmDescription }
-});
+    return { 
+        films,
+        sortFilmTitle,
+        sortFilmDescription,
+        setData,
+        setSortFilmTitle,
+        setSortFilmDescription
+    }
+}
+
+export const filmsCatalogStore = defineStore("filmsCatalog", filmsModel);
+export const filmsAccountStore = defineStore("filmsAccount", filmsModel);

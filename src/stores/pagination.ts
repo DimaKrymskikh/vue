@@ -15,7 +15,7 @@ export interface Pagination {
     [index: string]: any;
 }
 
-export const usePaginationStore = defineStore("pagination", () => {
+const paginationModel = function() {
     // Активная страница
     const activePage = ref(0 as number);
     // Число элементов на странице
@@ -75,4 +75,7 @@ export const usePaginationStore = defineStore("pagination", () => {
         getPageAfterRemoveFilm,
         isHiddenPagination
     };
-});
+}
+
+export const paginationCatalogStore = defineStore("paginationCatalog", paginationModel);
+export const paginationAccountStore = defineStore("paginationAccount", paginationModel);
