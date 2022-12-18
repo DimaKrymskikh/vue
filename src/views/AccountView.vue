@@ -60,7 +60,7 @@ if (app.token !== '') {
     
     <Spinner v-if="app.isRequest" />
     <template v-else>
-        <FilmsTable />
+        <FilmsTable :requestAccount="requestAccount" />
         <PaginationNav :pagination="paginationAccount" :request="requestAccount" />
     </template>
 </template>

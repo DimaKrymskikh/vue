@@ -9,6 +9,16 @@ const app = inject('app') as App;
 const filmsAccount = inject('filmsAccount') as Films;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
+const { requestAccount } = defineProps<{
+    requestAccount: Function
+}>();
+
+const putFilms = async function(e: KeyboardEvent) {
+        if(e.key.toLowerCase() !== "enter") {
+            return;
+        }
+        await requestAccount(paginationAccount, 1);
+}
 </script>
 
 <template>
@@ -26,8 +36,8 @@ const paginationAccount = inject('paginationAccount') as Pagination;
                 </tr>
                 <tr scope="col">
                     <th scope="col"></th>
-                    <th scope="col"><input type="text" id="sort-film-title" class="form-control" :value="filmsAccount.sortFilmTitle"></th>
-                    <th scope="col"><input type="text" id="sort-film-description" class="form-control" :value="filmsAccount.sortFilmDescription"></th>
+                    <th scope="col"><input type="text" class="form-control" v-model="filmsAccount.sortFilmTitle" @keyup="putFilms"></th>
+                    <th scope="col"><input type="text" class="form-control" v-model="filmsAccount.sortFilmDescription" @keyup="putFilms"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>

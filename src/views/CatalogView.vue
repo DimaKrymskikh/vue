@@ -59,7 +59,7 @@ loadingCatalog();
     
     <Spinner v-if="app.isRequest" />
     <template v-else>
-        <FilmsTable />
+        <FilmsTable :requestCatalog="requestCatalog" />
         <PaginationNav :pagination="paginationCatalog" :request="requestCatalog" />
     </template>
 </template>

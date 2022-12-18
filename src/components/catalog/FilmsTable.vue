@@ -9,6 +9,10 @@ const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
 const paginationCatalog = inject('paginationCatalog') as Pagination;
 
+const { requestCatalog } = defineProps<{
+    requestCatalog: Function
+}>();
+
 const requestAddFilm = async function(filmId: number) {
     return await request(app, `${app.basicUrl}/userFilm/${filmId}`, 'POST',
         JSON.stringify({
@@ -45,6 +49,13 @@ const handlerAddFilm = async function(e: Event) {
         checkCircle.classList.remove('visually-hidden');
     }
 }
+
+const putFilms = async function(e: KeyboardEvent) {
+        if(e.key.toLowerCase() !== "enter") {
+            return;
+        }
+        await requestCatalog(paginationCatalog, 1);
+}
 </script>
 
 <template>
@@ -60,8 +71,8 @@ const handlerAddFilm = async function(e: Event) {
         </tr>
         <tr scope="col">
             <th scope="col"></th>
-            <th scope="col"><input type="text" id="sort-film-title" class="form-control"  v-model="filmsCatalog.sortFilmTitle"></th>
-            <th scope="col"><input type="text" id="sort-film-description" class="form-control" v-model="filmsCatalog.sortFilmDescription"></th>
+            <th scope="col"><input type="text" class="form-control"  v-model="filmsCatalog.sortFilmTitle" @keyup="putFilms"></th>
+            <th scope="col"><input type="text" class="form-control" v-model="filmsCatalog.sortFilmDescription" @keyup="putFilms"></th>
             <th scope="col"></th>
             <th scope="col" v-if="!app.isGuest"></th>
         </tr>
