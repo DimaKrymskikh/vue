@@ -26,3 +26,11 @@ app.provide('paginationAccount', paginationAccountStore());
 app.provide('filmCard', filmCardStore());
 
 app.mount("#app");
+
+router.beforeEach((to, from) => {
+    // Если токен не получен и осуществляется переход не на главную страницу (например, нажаты клавиши Ctrl+F5),
+    // то переходим на главную страницу
+    if (useAppStore().token === '' && to.name !== 'home') {
+        router.push({ name: 'home' });
+    }
+});

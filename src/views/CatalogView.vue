@@ -41,16 +41,7 @@ const requestCatalog = async function(pagination: Pagination, page?: number) {
     );
 };
 
-const loadingCatalog = async function() {
-    if (app.token !== '') {
-        await requestCatalog(paginationCatalog);
-    } else {
-        setTimeout(loadingCatalog, 100);
-    }
-};
-
-loadingCatalog();
-
+requestCatalog(paginationCatalog);
 </script>
 
 <template>

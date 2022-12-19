@@ -45,12 +45,7 @@ const requestAccount = async function(pagination: Pagination, page?: number) {
     );
 };
 
-if (app.token !== '') {
-    requestAccount(paginationAccount);
-} else {
-    router.push({ name: 'home' });
-}
-
+requestAccount(paginationAccount);
 </script>
 
 <template>

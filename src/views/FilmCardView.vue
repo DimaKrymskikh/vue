@@ -33,12 +33,7 @@ async function requestFilmCard() {
     );
 };
 
-if (app.token !== '') {
-    requestFilmCard();
-} else {
-    router.push({ name: 'home' });
-}
-
+requestFilmCard();
 </script>
 
 <template>
