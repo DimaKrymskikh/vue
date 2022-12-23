@@ -14,5 +14,5 @@ const app = inject('app') as App;
 <template>
     <BreadCrumb :linksList="linksList" />
     <h1>Главная страница</h1>
-    <Spinner v-if="app.isRequest" />
+    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
 </template>

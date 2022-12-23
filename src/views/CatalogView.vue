@@ -48,7 +48,7 @@ requestCatalog(paginationCatalog);
     <BreadCrumb :linksList="linksList" />
     <h1>Каталог</h1>
     
-    <Spinner v-if="app.isRequest" />
+    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <FilmsTable :requestCatalog="requestCatalog" />
         <PaginationNav :pagination="paginationCatalog" :request="requestCatalog" />

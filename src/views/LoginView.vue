@@ -28,6 +28,12 @@ const router = useRouter();
 async function handlerLogin(e: Event) {
     e.preventDefault();
     
+    const currentTarget = e.currentTarget as Element;
+    
+    if (currentTarget?.classList.contains('disabled')) {
+        return;
+    }
+    
     const result = await request(app, `${app.basicUrl}/login`, 'POST',
         JSON.stringify({
             login: inputLogin.value,
@@ -51,25 +57,32 @@ async function handlerLogin(e: Event) {
 <BreadCrumb :linksList="linksList" />
     <h1>Вход</h1>
     
-    <Spinner v-if="app.isRequest" />
+    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <InputLabel>
             Логин: 
-            <input type="text" class="form-control" v-model="inputLogin" />
+            <input type="text" v-model="inputLogin" />
         </InputLabel>
         <InputLabel>
             Пароль:
-            <input type="password" class="form-control" v-model="inputPassword" />
+            <input type="password" v-model="inputPassword" />
         </InputLabel>
-        <div class="mb-3">
-            <button class="btn btn-primary" @click="handlerLogin">Вход</button>
+        <div class="mb-3 w-1/3 text-right">
+            <button 
+                class="p-1 w-36 rounded-lg"
+                :class="inputLogin === '' || inputPassword === '' ? 'disabled' : 'bg-orange-300 text-orange-700 hover:bg-orange-200 text-orange-600'"
+                @click="handlerLogin"
+            >
+                Вход
+            </button>
         </div>
 
-        <p>
-            <RouterLink class="btn btn-link" to="/register">
+        <div class="mb-4">
+            Не зарегистрированы?
+            <RouterLink class="ml-2 text-orange-700 hover:text-orange-900" to="/register">
                 Регистрация
             </RouterLink>
-        </p>
+        </div>
 
         <ErrorsList :errors="errors" />
     </template>

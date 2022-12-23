@@ -6,10 +6,14 @@ defineProps({
 </script>
 
 <template>
-    <div class="mb-3">
-        <label class="form-label">
-            <slot></slot>
-        </label>
-        <span class="alert-input" :hidden="isHidden">{{errorText}}</span>
+    <div class="flex">
+        <div class="mb-4 w-1/3 pr-4">
+            <label>
+                <slot></slot>
+            </label>
+        </div>
+        <div class="mb-4 w-2/3 pl-4 text-red-500 font-sans text-xs">
+            <span :hidden="isHidden">{{errorText}}</span>
+        </div>
     </div>
 </template>

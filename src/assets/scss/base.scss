@@ -1,0 +1,59 @@
+@layer base {
+    html {
+        font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    }
+    h1 {
+        @apply text-3xl mb-4;
+    }
+    h2 {
+        @apply text-2xl mb-2;
+    }
+    h3 {
+        @apply text-xl mb-1;
+    }
+    table {
+        @apply border-collapse border border-slate-400;
+    }
+    caption {
+        @apply font-sans text-left;
+    }
+    thead tr {
+        @apply first:bg-orange-200
+    }
+    tbody tr {
+        @apply odd:bg-orange-50 even:bg-white;
+    }
+    th {
+        @apply border border-slate-300 p-1;
+    }
+    input {
+        @apply bg-orange-50 border border-orange-300 focus:ring-orange-700 focus:border-orange-700 text-sm rounded-lg block w-full p-1;
+    }
+    td {
+        @apply border border-slate-300 p-1;
+    }
+    .nav-tab {
+        @apply px-2 flex;
+    }
+    .nav-link {
+        @apply self-end font-sans text-2xl text-orange-700 hover:text-orange-100 border-b-4 border-orange-300;
+    }
+    .active {
+        @apply text-orange-100 bg-orange-700 cursor-not-allowed;
+    }
+    .disabled {
+        @apply border-gray-300 text-gray-300 bg-gray-100 cursor-not-allowed;
+    }
+}
+
+.router-link-active {
+    border-color: rgb(194 65 12);
+}
+
+.router-link-active:hover {
+    border-color: rgb(255 237 213);
+}
+// Убираем синюю рамку при фокусировании
+input:focus {
+    outline:none;
+}

@@ -53,7 +53,7 @@ requestAccount(paginationAccount);
     <h1>{{user.login}}. Личный кабинет</h1>
     <h2>Список доступных фильмов</h2>
     
-    <Spinner v-if="app.isRequest" />
+    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <FilmsTable :requestAccount="requestAccount" />
         <PaginationNav :pagination="paginationAccount" :request="requestAccount" />

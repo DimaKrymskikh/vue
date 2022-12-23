@@ -14,13 +14,13 @@ defineProps({
 </script>
 
 <template>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+    <nav class="mb-4">
+        <ol class="flex">
             <template v-for="(item) in linksList">
-                <li class="breadcrumb-item active" v-if="item.link === undefined">
+                <li class="text-gray-400 py-2" v-if="item.link === undefined">
                     {{item.text}}
                 </li>
-                <li class="breadcrumb-item" v-else>
+                <li class="text-orange-700 py-2 hover:text-orange-900 after:content-['/'] after:px-2 after:text-orange-900" v-else>
                     <RouterLink :to="item.link">{{item.text}}</RouterLink>
                 </li>
             </template>

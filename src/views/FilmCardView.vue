@@ -39,30 +39,30 @@ requestFilmCard();
 <template>
     <BreadCrumb :linksList="linksList" />
     
-    <Spinner v-if="app.isRequest" />
+    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <h1>{{filmCard.title}}</h1>
-        <div class="row">
-            <div class="col">
-                <h4>Основная информация</h4>
+        <div class="flex">
+            <div class="w-1/4 pr-4">
+                <h3>Основная информация</h3>
             </div>
-            <div class="col">
-                <h4>Описание</h4>
+            <div class="w-1/2 px-4">
+                <h3>Описание</h3>
             </div>
-            <div class="col">
-                <h4>Актёры</h4>
+            <div class="w-1/4 pl-4">
+                <h3>Актёры</h3>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
+        <div class="flex">
+            <div class="w-1/4 pr-4">
                 <div>Фильм вышел в {{filmCard.releaseYear}} году</div>
                 <div>Язык фильма: {{filmCard.language}}</div>
             </div>
-            <div class="col">
+            <div class="w-1/2 px-4">
                 <div>{{filmCard.description}}</div>
             </div>
-            <div class="col">
+            <div class="w-1/4 pl-4">
                 <div v-for="(actorName) in filmCard.actorNames">{{actorName}}</div>
             </div>
         </div>

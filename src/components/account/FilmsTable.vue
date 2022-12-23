@@ -22,50 +22,49 @@ const putFilms = async function(e: KeyboardEvent) {
 </script>
 
 <template>
-    <div class="table-responsive">
-        <table id="personal-films-table" class="table table-striped table-hover  caption-top table-bordered">
-            <caption>Показано {{paginationAccount.elementsNumberOnActivePage}} фильмов из {{paginationAccount.itemsNumberTotal}}</caption>
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Название</th>
-                    <th scope="col">Описание</th>
-                    <th scope="col">Язык</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-                <tr scope="col">
-                    <th scope="col"></th>
-                    <th scope="col"><input type="text" class="form-control" v-model="filmsAccount.sortFilmTitle" @keyup="putFilms"></th>
-                    <th scope="col"><input type="text" class="form-control" v-model="filmsAccount.sortFilmDescription" @keyup="putFilms"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item) in filmsAccount.films">
-                    <th scope="row">{{item.n}}</th>
-                    <td>{{item.title}}</td>
-                    <td>{{item.description}}</td>
-                    <td>{{item.name}}</td>
-                    <td>
-                        <RouterLink :to="{name: 'filmCard', params: { filmId: item.id }}">
-                            <img
-                                src="@/assets/svg/eye.svg"
-                                alt="Карточка фильма"
-                                title="Карточка фильма">
-                        </Routerlink>
-                    </td>
-                    <td>
-                        <img class="removal-film"
-                            data-film-id="${item.id}"
-                            src="@/assets/svg/trash.svg"
-                            alt="Удаление фильма"
-                            title="Удаление фильма">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<table class="container">
+    <caption>Показано {{paginationAccount.elementsNumberOnActivePage}} фильмов из {{paginationAccount.itemsNumberTotal}}</caption>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Язык</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <th></th>
+            <th><input type="text" class="form-control" v-model="filmsAccount.sortFilmTitle" @keyup="putFilms"></th>
+            <th><input type="text" class="form-control" v-model="filmsAccount.sortFilmDescription" @keyup="putFilms"></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="(item) in filmsAccount.films">
+            <td>{{item.n}}</td>
+            <td>{{item.title}}</td>
+            <td>{{item.description}}</td>
+            <td>{{item.name}}</td>
+            <td>
+                <RouterLink :to="{name: 'filmCard', params: { filmId: item.id }}">
+                    <img
+                        class="m-auto"
+                        src="@/assets/svg/eye.svg"
+                        alt="Карточка фильма"
+                        title="Карточка фильма">
+                </Routerlink>
+            </td>
+            <td>
+                <img class="removal-film m-auto"
+                    data-film-id="${item.id}"
+                    src="@/assets/svg/trash.svg"
+                    alt="Удаление фильма"
+                    title="Удаление фильма">
+            </td>
+        </tr>
+    </tbody>
+</table>
 </template>

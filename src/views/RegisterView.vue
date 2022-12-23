@@ -66,8 +66,6 @@ const verification = computed(() => {
     }
 });
 
-const disabled = computed(() => login.value.isLogin && password.value.isPassword && verification.value.isVerification ? '' : 'disabled');
-
 const errors = ref([]);
 
 const router = useRouter();
@@ -76,6 +74,12 @@ const verificationError = "Нет совпадения";
         
 async function handlerRegistration(e: Event) {
     e.preventDefault();
+    
+    const currentTarget = e.currentTarget as Element;
+    
+    if (currentTarget?.classList.contains('disabled')) {
+        return;
+    }
 
     const result = await request(app, `${app.basicUrl}/register`, 'POST',
         JSON.stringify({
@@ -102,22 +106,28 @@ async function handlerRegistration(e: Event) {
     <BreadCrumb :linksList="linksList" />
     <h1>Регистрация</h1>
     
-    <Spinner v-if="app.isRequest" />
+    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <InputLabel :isHidden="login.isHidden" :errorText="login.loginError">
             Логин:
-            <input type="text" class="form-control" v-model="inputLogin" />
+            <input type="text" v-model="inputLogin" />
         </InputLabel>
         <InputLabel :isHidden="password.isHidden" :errorText="password.passwordError">
             Пароль:
-            <input type="password" class="form-control" v-model="inputPassword" />
+            <input type="password" v-model="inputPassword" />
         </InputLabel>
         <InputLabel :isHidden="verification.isHidden" :errorText="verificationError">
             Подтверждение пароля:
-            <input type="password" class="form-control" v-model="inputVerification" />
+            <input type="password" v-model="inputVerification" />
         </InputLabel>
-        <div class="mb-3">
-            <button class="btn btn-primary" :class="disabled" @click="handlerRegistration">Зарегистрироваться</button>
+        <div class="mb-3 w-1/3 text-right">
+            <button
+                class="p-1 w-48 rounded-lg"
+                :class="login.isLogin && password.isPassword && verification.isVerification ? 'bg-orange-300 text-orange-700 hover:bg-orange-200 text-orange-600' : 'disabled'"
+                @click="handlerRegistration"
+            >
+                Зарегистрироваться
+            </button>
         </div>
 
         <ErrorsList :errors="errors" />

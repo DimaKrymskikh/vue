@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 import { request } from '../../tools/request';
+import Spinner from '../Spinner.vue';
 import type { App } from '../../stores/app';
 import type { Films } from '../../stores/films';
 import type { Pagination } from '../../stores/pagination';
@@ -40,13 +41,13 @@ const handlerAddFilm = async function(e: Event) {
     const checkCircle = tagParent.querySelector('.check-circle') as Element;
 
     const tagDataFilmId = tag.getAttribute('data-film-id') as unknown as number;
-    const spinner = tag.parentNode?.querySelector('.spinner-border') as Element;
-    tag.classList.add('visually-hidden');
-    spinner.classList.remove('visually-hidden');
+    const spinner = tag.parentNode?.querySelector('.spinner') as Element;
+    tag.classList.add('hidden');
+    spinner.classList.remove('hidden');
 
     if (await requestAddFilm(tagDataFilmId)) {
-        spinner.classList.add('visually-hidden');
-        checkCircle.classList.remove('visually-hidden');
+        spinner.classList.add('hidden');
+        checkCircle.classList.remove('hidden');
     }
 }
 
@@ -59,38 +60,38 @@ const putFilms = async function(e: KeyboardEvent) {
 </script>
 
 <template>
-<table id="films-table" class="table table-striped table-hover  caption-top table-bordered" @click="handlerAddFilm">
+<table class="container" @click="handlerAddFilm">
     <caption>Показано {{paginationCatalog.elementsNumberOnActivePage}} фильмов из {{paginationCatalog.itemsNumberTotal}}</caption>
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Название</th>
-            <th scope="col">Описание</th>
-            <th scope="col">Язык</th>
-            <th scope="col" v-if="!app.isGuest"></th>
+            <th>#</th>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Язык</th>
+            <th v-if="!app.isGuest"></th>
         </tr>
-        <tr scope="col">
-            <th scope="col"></th>
-            <th scope="col"><input type="text" class="form-control"  v-model="filmsCatalog.sortFilmTitle" @keyup="putFilms"></th>
-            <th scope="col"><input type="text" class="form-control" v-model="filmsCatalog.sortFilmDescription" @keyup="putFilms"></th>
-            <th scope="col"></th>
-            <th scope="col" v-if="!app.isGuest"></th>
+        <tr>
+            <th></th>
+            <th><input type="text" v-model="filmsCatalog.sortFilmTitle" @keyup="putFilms"></th>
+            <th><input type="text" v-model="filmsCatalog.sortFilmDescription" @keyup="putFilms"></th>
+            <th></th>
+            <th v-if="!app.isGuest"></th>
         </tr>
     </thead>
     <tbody>
         <tr v-for="(item) in filmsCatalog.films">
-            <th scope="row">{{item.n}}</th>
+            <td>{{item.n}}</td>
             <td>{{item.title}}</td>
             <td>{{item.description}}</td>
             <td>{{item.name}}</td>
             <template v-if="!app.isGuest">
                 <td v-if="item.isAvailable">
-                    <img src="@/assets/svg/check-circle.svg" alt="check-circle">
+                    <img class="m-auto" src="@/assets/svg/check-circle.svg" alt="check-circle">
                 </td>
                 <td v-else>
-                    <span class="spinner-border spinner-border-sm visually-hidden"></span>
-                    <img class="add-film" src="@/assets/svg/plus-circle.svg" alt="plus-circle" :data-film-id="item.id">
-                    <img class="check-circle visually-hidden" src="@/assets/svg/check-circle.svg" alt="check-circle">
+                    <Spinner :hSpinner="'h-4'" class="m-auto spinner hidden" />
+                    <img class="add-film m-auto" src="@/assets/svg/plus-circle.svg" alt="plus-circle" :data-film-id="item.id">
+                    <img class="check-circle m-auto hidden" src="@/assets/svg/check-circle.svg" alt="check-circle">
                 </td>
             </template>
         </tr>
