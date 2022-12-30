@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { request } from '../../tools/request';
 import Spinner from '../Spinner.vue';
 import type { App } from '../../stores/app';
 import type { Films } from '../../stores/films';
 import type { Pagination } from '../../stores/pagination';
+
+const router = useRouter();
+const route = useRoute();
 
 const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
@@ -52,10 +56,16 @@ const handlerAddFilm = async function(e: Event) {
 }
 
 const putFilms = async function(e: KeyboardEvent) {
-        if(e.key.toLowerCase() !== "enter") {
-            return;
-        }
-        await requestCatalog(paginationCatalog, 1);
+    if(e.key.toLowerCase() !== "enter") {
+        return;
+    }
+    // Если поиск ведётся на 1-й странице, то делаем прямой запрос методом requestCatalog
+    if (parseInt(route.params.pageId as string, 10) === 1) {
+        await requestCatalog();
+    // иначе используем router.push
+    } else {
+        await router.push({name: 'catalog', params: {pageId: 1}});
+    }
 }
 </script>
 
@@ -89,7 +99,7 @@ const putFilms = async function(e: KeyboardEvent) {
                     <img class="m-auto" src="@/assets/svg/check-circle.svg" alt="check-circle">
                 </td>
                 <td v-else>
-                    <Spinner :hSpinner="'h-4'" class="m-auto spinner hidden" />
+                    <Spinner :hSpinner="'h-4'" class="spinner flex justify-center m-auto hidden" />
                     <img class="add-film m-auto" src="@/assets/svg/plus-circle.svg" alt="plus-circle" :data-film-id="item.id">
                     <img class="check-circle m-auto hidden" src="@/assets/svg/check-circle.svg" alt="check-circle">
                 </td>

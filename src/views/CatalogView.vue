@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, watch } from 'vue';
+import { useRoute } from 'vue-router'
 import FilmsTable from '../components/catalog/FilmsTable.vue';
 import BreadCrumb from '../components/BreadCrumb.vue';
 import PaginationNav from '../components/PaginationNav.vue';
@@ -22,12 +23,11 @@ const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
 const paginationCatalog = inject('paginationCatalog') as Pagination;
 
-const requestCatalog = async function(pagination: Pagination, page?: number) {
-    let pageOnServer = arguments.length === 2 ? page : pagination.activePage;
-    let itemsNumberOnPage = typeof pagination === "object" ? pagination.itemsNumberOnPage : pagination;
-    
+const route = useRoute();
+
+const requestCatalog = async function() {
     // Запрос на сервер для получения списка фильмов и параметров пагинации
-    return await request(app, `${app.basicUrl}/film/${pageOnServer}/${itemsNumberOnPage}`, 'POST',
+    await request(app, `${app.basicUrl}/film/${route.params.pageId}/${paginationCatalog.itemsNumberOnPage}`, 'POST',
         JSON.stringify({
             token: app.token,
             aud: app.aud,
@@ -41,16 +41,21 @@ const requestCatalog = async function(pagination: Pagination, page?: number) {
     );
 };
 
-requestCatalog(paginationCatalog);
+requestCatalog();
+
+watch(
+    () => route.params.pageId,
+    requestCatalog
+);
 </script>
 
 <template>
     <BreadCrumb :linksList="linksList" />
     <h1>Каталог</h1>
     
-    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
+    <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <FilmsTable :requestCatalog="requestCatalog" />
-        <PaginationNav :pagination="paginationCatalog" :request="requestCatalog" />
+        <PaginationNav :routeName="'catalog'" :pagination="paginationCatalog"/>
     </template>
 </template>

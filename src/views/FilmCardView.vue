@@ -6,12 +6,15 @@ import Spinner from '../components/Spinner.vue';
 import { request } from '../tools/request';
 import type { App } from '../stores/app';
 import type { Film } from '../stores/film';
+import type { Pagination } from './stores/pagination';
+
+const paginationAccount = inject('paginationAccount') as Pagination;
 
 const linksList = [{
                 link: '/',
                 text: 'Главная страница'
             }, {
-                link: '/account',
+                link: {name: 'account', params: { pageId: paginationAccount.activePage }},
                 text: 'Личный кабинет'
             }, {
                 text: 'Карточка фильма'
@@ -39,7 +42,7 @@ requestFilmCard();
 <template>
     <BreadCrumb :linksList="linksList" />
     
-    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
+    <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <h1>{{filmCard.title}}</h1>
         <div class="flex">

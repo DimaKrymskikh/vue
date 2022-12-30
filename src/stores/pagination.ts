@@ -17,7 +17,8 @@ export interface Pagination {
 
 const paginationModel = function() {
     // Активная страница
-    const activePage = ref(0 as number);
+    // По умолчанию нужно использовать 1 (а не 0), чтобы правильно определялась активная страница при первом посещении
+    const activePage = ref(1 as number);
     // Число элементов на странице
     const itemsNumberOnPage = ref(0 as number);
     // Общее число элементов в списке
@@ -35,8 +36,6 @@ const paginationModel = function() {
     /**
      * Изменяет свойства пагинации
      * (Данные приходят с сервера, где реализуется логика вычисления свойств пагинации)
-     * @param {Object} data - Новые свойства пагинации
-     * @returns {void}
      */
     const setData = function(this: Pagination, data: Pagination) {
         for (let field in data) {
@@ -48,8 +47,7 @@ const paginationModel = function() {
     };
     
     /**
-     * Возвращает номер страницы, который будет отдан на сервер после удаления фильма
-     * @returns {int}
+     * Возвращает номер активной страницы после удаления фильма
      */
     const getPageAfterRemoveFilm = function(this: Pagination) {
         return this.elementsNumberOnActivePage - 1 ? this.activePage : this.activePage - 1;
@@ -57,7 +55,6 @@ const paginationModel = function() {
 
     /**
      * Если нет элементов в списке, то возвращает true, чтобы скрыть пагинацию на странице
-     * @returns {Boolean}
      */
     const isHiddenPagination = function(this: Pagination) {
         return !this.itemsNumberTotal;

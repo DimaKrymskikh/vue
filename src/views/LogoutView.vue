@@ -26,5 +26,5 @@ const router = useRouter();
 </script>
 
 <template>
-    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
+    <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
 </template>

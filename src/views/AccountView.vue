@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { inject } from 'vue';
-import { useRouter } from 'vue-router'
+import { inject, watch } from 'vue';
+import { useRoute } from 'vue-router'
 import FilmsTable from '../components/account/FilmsTable.vue';
 import BreadCrumb from '../components/BreadCrumb.vue';
 import PaginationNav from '../components/PaginationNav.vue';
@@ -25,13 +25,11 @@ const user = inject('user') as User;
 const filmsAccount = inject('filmsAccount') as Films;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
-const router = useRouter();
+const route = useRoute();
 
-const requestAccount = async function(pagination: Pagination, page?: number) {
-    let pageOnServer = arguments.length === 2 ? page : pagination.activePage;
-    let itemsNumberOnPage = typeof pagination === "object" ? pagination.itemsNumberOnPage : pagination;
-    
-    return await request(app, `${app.basicUrl}/account/index/${pageOnServer}/${itemsNumberOnPage}`, 'POST',
+const requestAccount = async function() {
+    //
+    await request(app, `${app.basicUrl}/account/index/${route.params.pageId}/${paginationAccount.itemsNumberOnPage}`, 'POST',
         JSON.stringify({
             token: app.token,
             aud: app.aud,
@@ -45,7 +43,12 @@ const requestAccount = async function(pagination: Pagination, page?: number) {
     );
 };
 
-requestAccount(paginationAccount);
+requestAccount();
+
+watch(
+    () => route.params.pageId,
+    requestAccount
+);
 </script>
 
 <template>
@@ -53,9 +56,9 @@ requestAccount(paginationAccount);
     <h1>{{user.login}}. Личный кабинет</h1>
     <h2>Список доступных фильмов</h2>
     
-    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
+    <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <FilmsTable :requestAccount="requestAccount" />
-        <PaginationNav :pagination="paginationAccount" :request="requestAccount" />
+        <PaginationNav :routeName="'account'" :pagination="paginationAccount"/>
     </template>
 </template>

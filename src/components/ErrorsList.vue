@@ -5,7 +5,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="w-1/3 font-sans"  :hidden="!errors?.length">
-        <div class="text-red-500 bg-red-100 rounded-lg p-2 mb-2" v-for="error in errors">{{error}}</div>
+    <div class="font-sans"  :hidden="!errors?.length">
+        <div class="text-red-700 bg-red-100 rounded-lg px-6 py-2 mb-2 border border-red-500" v-for="error in errors">{{error}}</div>
     </div>
 </template>

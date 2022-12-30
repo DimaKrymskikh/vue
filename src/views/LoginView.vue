@@ -57,7 +57,7 @@ async function handlerLogin(e: Event) {
 <BreadCrumb :linksList="linksList" />
     <h1>Вход</h1>
     
-    <Spinner :hSpinner="'h-96'" v-if="app.isRequest" />
+    <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
         <InputLabel>
             Логин: 
@@ -84,6 +84,6 @@ async function handlerLogin(e: Event) {
             </RouterLink>
         </div>
 
-        <ErrorsList :errors="errors" />
+        <ErrorsList class="w-1/3" :errors="errors" />
     </template>
 </template>

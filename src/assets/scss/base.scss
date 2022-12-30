@@ -18,7 +18,7 @@
         @apply font-sans text-left;
     }
     thead tr {
-        @apply first:bg-orange-200
+        @apply first:bg-orange-200;
     }
     tbody tr {
         @apply odd:bg-orange-50 even:bg-white;
@@ -38,21 +38,20 @@
     .nav-link {
         @apply self-end font-sans text-2xl text-orange-700 hover:text-orange-100 border-b-4 border-orange-300;
     }
+    .nav-link.router-link-active {
+        @apply border-orange-700 hover:border-orange-100;
+    }
     .active {
         @apply text-orange-100 bg-orange-700 cursor-not-allowed;
     }
     .disabled {
         @apply border-gray-300 text-gray-300 bg-gray-100 cursor-not-allowed;
     }
+    .stop-event {
+        @apply cursor-not-allowed;
+    }
 }
 
-.router-link-active {
-    border-color: rgb(194 65 12);
-}
-
-.router-link-active:hover {
-    border-color: rgb(255 237 213);
-}
 // Убираем синюю рамку при фокусировании
 input:focus {
     outline:none;
