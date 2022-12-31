@@ -15,7 +15,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: update, password: string): void
+    (e: 'update:password', password: string): void
 }>();
 </script>
 

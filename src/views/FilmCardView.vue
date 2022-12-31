@@ -6,7 +6,7 @@ import Spinner from '../components/Spinner.vue';
 import { request } from '../tools/request';
 import type { App } from '../stores/app';
 import type { Film } from '../stores/film';
-import type { Pagination } from './stores/pagination';
+import type { Pagination } from '../stores/pagination';
 
 const paginationAccount = inject('paginationAccount') as Pagination;
 
