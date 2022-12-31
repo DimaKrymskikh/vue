@@ -75,6 +75,7 @@ const hideFilmRemoveModal = function(e: Event) {
         return;
     }
     isShowFilmRemoveModal.value = false;
+    inputPassword.value = '';
 };
 
 const requestRemoveFilm = async function(filmId: string | null) {

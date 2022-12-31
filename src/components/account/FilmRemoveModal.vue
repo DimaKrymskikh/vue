@@ -14,7 +14,9 @@ defineProps<{
     errors: Array<String>
 }>();
 
-defineEmits<{(e: 'update', password: string): void}>();
+const emit = defineEmits<{
+    (e: update, password: string): void
+}>();
 </script>
 
 <template>
