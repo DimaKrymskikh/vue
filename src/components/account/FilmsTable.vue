@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { request } from '../../tools/request';
 import FilmRemoveModal from './FilmRemoveModal.vue';
 import AccountRemoveModal from './AccountRemoveModal.vue';
-import type { App } from '../../stores/app';
-import type { User } from '../../stores/user';
 import type { Films } from '../../stores/films';
 import type { Pagination } from '../../stores/pagination';
 
 const router = useRouter();
 const route = useRoute();
 
-const app = inject('app') as App;
-const user = inject('user') as User;
 const filmsAccount = inject('filmsAccount') as Films;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
@@ -21,14 +16,15 @@ const { requestAccount } = defineProps<{
     requestAccount: Function
 }>();
 
-const isRequest = ref(false);
-const inputPassword = ref('');
-const errors = ref([]);
-const filmName = ref('');
-const filmId = ref(0);
-const isShowFilmRemoveModal = ref(false)
+// Отслеживает открытие модального окна для удаления фильма
+const isShowFilmRemoveModal = ref(false);
+// Содержит id удаляемого фильма
+const removeFilmId = ref(0);
+// Отслеживает открытие модального окна для удаления аккаунта
 const isShowAccountRemoveModal = ref(false)
 
+// Фильтрует фильмы 
+// Запрос отправляется нажатием на клавишу "Enter"
 const putFilms = async function(e: KeyboardEvent) {
     if(e.key.toLowerCase() !== "enter") {
         return;
@@ -42,125 +38,25 @@ const putFilms = async function(e: KeyboardEvent) {
     }
 };
 
+// Отслеживает события таблицы фильмов
 const handlerFilms = function(e: Event) {
     const target = e.target as Element;
     if(target?.classList.contains('removal-film')) {
-        showFilmRemoveModal(target);
+        removeFilmId.value = target.getAttribute('data-film-id') as any as number;
+        toggleShowFilmRemoveModal();
     }
 };
 
-const requestGetFilm = async function(filmId: string | null) {
-    return  await request(app, `${app.basicUrl}/account/getFilm/${filmId}`, 'POST',
-        JSON.stringify({
-            token: app.token,
-            aud: app.aud
-        }),
-        {},
-        false
-    );
-};
-
-const showFilmRemoveModal = async function(tag: Element) {
-    isShowFilmRemoveModal.value = true;
-    isRequest.value = true;
-    errors.value = [];
-    
-    const result = await requestGetFilm(tag.getAttribute('data-film-id'));
-    
-    isRequest.value = false;
-    filmId.value = result.id;
-    filmName.value = result.title;
+// Открывает/Закрывает модальное окно для удаления фильма
+const toggleShowFilmRemoveModal = function() {
+    isShowFilmRemoveModal.value = !isShowFilmRemoveModal.value
 }
 
-const hideFilmRemoveModal = function(e: Event) {
-    const target = e.currentTarget as Element;
-    if(target?.classList.contains('disabled') || target?.classList.contains('stop-event')) {
-        return;
-    }
-    isShowFilmRemoveModal.value = false;
-    inputPassword.value = '';
-};
-
-const requestRemoveFilm = async function() {
-    return  await request(app, `${app.basicUrl}/userFilm/${filmId.value}`, 'DELETE',
-        JSON.stringify({
-            token: app.token,
-            aud: app.aud,
-            password: inputPassword.value
-        }),
-        {},
-        false
-    );
+// Открывает/Закрывает модальное окно для удаления аккаунта
+const toggleShowAccountRemoveModal = function() {
+    isShowAccountRemoveModal.value = !isShowAccountRemoveModal.value
 }
 
-const handlerRemoveFilm = async function(e: Event) {
-    e.stopPropagation();
-    const target = e.currentTarget as Element;
-    if(target?.classList.contains('disabled') || target?.classList.contains('stop-event')) {
-        return;
-    }
-    isRequest.value = true;
-    
-    const result = await requestRemoveFilm();
-
-    isRequest.value = false;
-    if (result.errors.length === 0) {
-        // Если на странице удалялся последний фильм, то используем router.push, чтобы обновить данные
-        if (paginationAccount.getPageAfterRemoveFilm() !== paginationAccount.activePage) {
-            await router.push({name: 'account', params: {pageId: paginationAccount.getPageAfterRemoveFilm()}});
-        // Иначе (route.params.pageId === paginationAccount.activePage и router.push не обновит данные), делаем запрос
-        } else {
-            await requestAccount();
-        }
-        isShowFilmRemoveModal.value = false;
-    } else {
-        inputPassword.value = '';
-        errors.value = result.errors;
-    }
-}
-
-const showAccountRemoveModal = function() {
-    isShowAccountRemoveModal.value = true;
-    errors.value = [];
-}
-
-const hideAccountRemoveModal = function(e: Event) {
-    const target = e.currentTarget as Element;
-    if(target?.classList.contains('disabled') || target?.classList.contains('stop-event')) {
-        return;
-    }
-    isShowAccountRemoveModal.value = false;
-    inputPassword.value = '';
-};
-
-const handlerRemoveAccount = async function(e: Event) {
-    const target = e.currentTarget as Element;
-    if(target?.classList.contains('disabled')) {
-        return;
-    }
-    errors.value = [];
-    isRequest.value = true;
-    
-    // Запрос на удаление аккаунта
-    const result = await request(app, `${app.basicUrl}/account`, 'DELETE',
-        JSON.stringify({
-            password: inputPassword.value,
-            token: app.token,
-            aud: app.aud
-        }),
-        {app, user},
-        false
-    );
-
-    isRequest.value = false;
-    
-    if (result.errors.length === 0) {
-        await router.push({name: 'home'});
-    } else {
-        inputPassword.value = '';
-        errors.value = result.errors;
-    }
-}
 </script>
 
 <template>
@@ -168,7 +64,7 @@ const handlerRemoveAccount = async function(e: Event) {
     <h2>Список доступных фильмов</h2>
     <button
         class="px-4 py-2 bg-red-100 text-red-700 hover:bg-red-300 hover:text-red-900 rounded-lg"
-        @click="showAccountRemoveModal"
+        @click="toggleShowAccountRemoveModal"
     >
         Удалить аккаунт
     </button>
@@ -210,7 +106,8 @@ const handlerRemoveAccount = async function(e: Event) {
                 </Routerlink>
             </td>
             <td>
-                <img class="removal-film m-auto"
+                <img 
+                    class="removal-film m-auto"
                     :data-film-id="item.id"
                     src="@/assets/svg/trash.svg"
                     alt="Удаление фильма"
@@ -221,19 +118,12 @@ const handlerRemoveAccount = async function(e: Event) {
 </table>
 <FilmRemoveModal
     v-if="isShowFilmRemoveModal"
-    :isRequest="isRequest"
-    :filmName="filmName"
-    :hideFilmRemoveModal="hideFilmRemoveModal"
-    :handlerRemoveFilm="handlerRemoveFilm"
-    v-model:password="inputPassword"
-    :errors="errors"
+    :toggleShowFilmRemoveModal="toggleShowFilmRemoveModal"
+    :removeFilmId="removeFilmId"
+    :requestAccount="requestAccount"
 />
 <AccountRemoveModal
     v-if="isShowAccountRemoveModal"
-    :isRequest="isRequest"
-    :hideAccountRemoveModal="hideAccountRemoveModal"
-    :handlerRemoveAccount="handlerRemoveAccount"
-    v-model:password="inputPassword"
-    :errors="errors"
+    :toggleShowAccountRemoveModal="toggleShowAccountRemoveModal"
 />
 </template>

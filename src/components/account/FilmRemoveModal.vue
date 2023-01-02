@@ -1,20 +1,97 @@
 <script setup lang="ts">
+import { inject, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Modal from '../Modal.vue';
 import Spinner from '../Spinner.vue';
 import ErrorsList from '../ErrorsList.vue';
+import { request } from '../../tools/request';
+import type { App } from '../../stores/app';
+import type { Pagination } from '../../stores/pagination';
 
-defineProps<{
-    password: String,
-    isRequest: Boolean,
-    filmName: String,
-    hideFilmRemoveModal: (payload: MouseEvent) => void,
-    handlerRemoveFilm: (payload: MouseEvent) => void,
-    errors: Array<String>
+const router = useRouter();
+
+const app = inject('app') as App;
+const paginationAccount = inject('paginationAccount') as Pagination;
+
+const { removeFilmId, toggleShowFilmRemoveModal, requestAccount } = defineProps<{
+    removeFilmId: Number,
+    toggleShowFilmRemoveModal: Function,
+    requestAccount: Function
 }>();
 
-const emit = defineEmits<{
-    (e: 'update:password', password: string): void
-}>();
+// Выполняется ли запрос. При монтировке компоненты выполняется запрос
+const isRequest = ref(true);
+// Величина поля для пароля
+const inputPassword = ref('');
+// Сообщение об ошибке из-за неправильно введённого пароля
+const errors = ref([]);
+// Название удаляемого фильма
+const removeFilmName = ref('');
+
+// Запрос для получения названия фильма, который собираются удалить
+(async function() {
+    const result = await request(app, `${app.basicUrl}/account/getFilm/${removeFilmId}`, 'POST',
+        JSON.stringify({
+            token: app.token,
+            aud: app.aud
+        }),
+        {},
+        false
+    );
+    
+    isRequest.value = false;
+    // Имя удаляемого фильма
+    removeFilmName.value = result.title;
+})();
+
+// Скрывает модальное окно для удаления фильма
+const hideFilmRemoveModal = function(e: Event) {
+    const target = e.currentTarget as Element;
+    // Если выполняется запрос, то закрыть модальное окно нельзя
+    if(target?.classList.contains('disabled') || target?.classList.contains('stop-event')) {
+        return;
+    }
+    toggleShowFilmRemoveModal();
+};
+
+// Обработчик удаления фильма
+const handlerRemoveFilm = async function(e: Event) {
+    e.stopPropagation();
+    const target = e.currentTarget as Element;
+    // Блокируем повторное удаление фильма
+    if(target?.classList.contains('disabled')) {
+        return;
+    }
+    isRequest.value = true;
+    
+    // Запрос на удаления фильма
+    const result = await request(app, `${app.basicUrl}/userFilm/${removeFilmId}`, 'DELETE',
+        JSON.stringify({
+            token: app.token,
+            aud: app.aud,
+            password: inputPassword.value
+        }),
+        {},
+        false
+    );
+
+    isRequest.value = false;
+    // Если пароль введён верно
+    if (result.errors.length === 0) {
+        // Если на странице удалялся последний фильм, то используем router.push, чтобы обновить данные
+        if (paginationAccount.getPageAfterRemoveFilm() !== paginationAccount.activePage) {
+            await router.push({name: 'account', params: {pageId: paginationAccount.getPageAfterRemoveFilm()}});
+        // Иначе (route.params.pageId === paginationAccount.activePage и router.push не обновит данные), делаем запрос
+        } else {
+            await requestAccount();
+        }
+        toggleShowFilmRemoveModal();
+    // Если пароль введён неверно
+    } else {
+        inputPassword.value = '';
+        errors.value = result.errors;
+    }
+}
 </script>
 
 <template>
@@ -28,16 +105,11 @@ const emit = defineEmits<{
     <template v-slot:body>
         Вы действительно хотите удалить фильм 
         <Spinner :hSpinner="'h-4'" class="inline-block" v-if="isRequest"/>
-        <span id="remove-film-name" v-else>{{filmName}}</span>?
+        <span id="remove-film-name" v-else>{{removeFilmName}}</span>?
         <div class="mb-3">
             <label>Введите пароль: 
                 <Spinner :hSpinner="'h-8'" class="flex justify-center" v-if="isRequest"/>
-                <input
-                    type="password"
-                    :value="password"
-                    @input="$emit('update:password', ($event.target as HTMLInputElement)?.value)"
-                    v-else
-                />
+                <input type="password" v-model="inputPassword" v-else/>
             </label>
         </div>
         <ErrorsList class="w-full" :errors="errors" />
