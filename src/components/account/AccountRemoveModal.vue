@@ -6,9 +6,8 @@ import ErrorsList from '../ErrorsList.vue';
 defineProps<{
     password: String,
     isRequest: Boolean,
-    filmName: String,
-    hideFilmRemoveModal: (payload: MouseEvent) => void,
-    handlerRemoveFilm: (payload: MouseEvent) => void,
+    hideAccountRemoveModal: (payload: MouseEvent) => void,
+    handlerRemoveAccount: (payload: MouseEvent) => void,
     errors: Array<String>
 }>();
 
@@ -21,14 +20,12 @@ const emit = defineEmits<{
 <Modal
     :modalId="'film-remove-modal'"
     :isRequest="isRequest"
-    :headerTitle="'Подтверждение удаления фильма'"
-    :handlerSubmit="handlerRemoveFilm"
-    :hideModal="hideFilmRemoveModal"
+    :headerTitle="'Подтверждение удаления аккаунта'"
+    :handlerSubmit="handlerRemoveAccount"
+    :hideModal="hideAccountRemoveModal"
 >
     <template v-slot:body>
-        Вы действительно хотите удалить фильм 
-        <Spinner :hSpinner="'h-4'" class="inline-block" v-if="isRequest"/>
-        <span id="remove-film-name" v-else>{{filmName}}</span>?
+        Вы действительно хотите удалить свой аккаунт?
         <div class="mb-3">
             <label>Введите пароль: 
                 <Spinner :hSpinner="'h-8'" class="flex justify-center" v-if="isRequest"/>
@@ -44,3 +41,4 @@ const emit = defineEmits<{
     </template>
 </Modal>
 </template>
+

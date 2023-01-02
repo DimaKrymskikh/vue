@@ -54,7 +54,6 @@ watch(
 <template>
     <BreadCrumb :linksList="linksList" />
     <h1>{{user.login}}. Личный кабинет</h1>
-    <h2>Список доступных фильмов</h2>
     
     <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>

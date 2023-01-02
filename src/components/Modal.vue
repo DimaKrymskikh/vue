@@ -3,7 +3,6 @@ const { modalId } = defineProps<{
     modalId: string,
     headerTitle: String,
     isRequest: Boolean,
-    submitId: Number
     handlerSubmit: (payload: MouseEvent) => void,
     hideModal: (payload: MouseEvent) => void
 }>();
@@ -52,7 +51,6 @@ const { modalId } = defineProps<{
                         type="button" 
                         class="px-3 py-1.5 text-sm text-center font-medium rounded-lg border"
                         :class="isRequest ? 'disabled' : 'text-red-700 bg-red-100 hover:bg-red-700 hover:text-red-100 border-red-700'"
-                        :data-submit-id="submitId"
                         @click="handlerSubmit"
                     >
                         Да

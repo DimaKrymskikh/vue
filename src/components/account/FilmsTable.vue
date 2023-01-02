@@ -3,7 +3,9 @@ import { inject, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { request } from '../../tools/request';
 import FilmRemoveModal from './FilmRemoveModal.vue';
+import AccountRemoveModal from './AccountRemoveModal.vue';
 import type { App } from '../../stores/app';
+import type { User } from '../../stores/user';
 import type { Films } from '../../stores/films';
 import type { Pagination } from '../../stores/pagination';
 
@@ -11,6 +13,7 @@ const router = useRouter();
 const route = useRoute();
 
 const app = inject('app') as App;
+const user = inject('user') as User;
 const filmsAccount = inject('filmsAccount') as Films;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
@@ -18,13 +21,13 @@ const { requestAccount } = defineProps<{
     requestAccount: Function
 }>();
 
-const filmName = ref('');
-const filmId = ref(0);
 const isRequest = ref(false);
-const isShowFilmRemoveModal = ref(false)
-const removeFilmPassword = ref(null as unknown as Element);
 const inputPassword = ref('');
 const errors = ref([]);
+const filmName = ref('');
+const filmId = ref(0);
+const isShowFilmRemoveModal = ref(false)
+const isShowAccountRemoveModal = ref(false)
 
 const putFilms = async function(e: KeyboardEvent) {
     if(e.key.toLowerCase() !== "enter") {
@@ -78,8 +81,8 @@ const hideFilmRemoveModal = function(e: Event) {
     inputPassword.value = '';
 };
 
-const requestRemoveFilm = async function(filmId: string | null) {
-    return  await request(app, `${app.basicUrl}/userFilm/${filmId}`, 'DELETE',
+const requestRemoveFilm = async function() {
+    return  await request(app, `${app.basicUrl}/userFilm/${filmId.value}`, 'DELETE',
         JSON.stringify({
             token: app.token,
             aud: app.aud,
@@ -98,7 +101,7 @@ const handlerRemoveFilm = async function(e: Event) {
     }
     isRequest.value = true;
     
-    const result = await requestRemoveFilm(target.getAttribute('data-submit-id'));
+    const result = await requestRemoveFilm();
 
     isRequest.value = false;
     if (result.errors.length === 0) {
@@ -115,9 +118,62 @@ const handlerRemoveFilm = async function(e: Event) {
         errors.value = result.errors;
     }
 }
+
+const showAccountRemoveModal = function() {
+    isShowAccountRemoveModal.value = true;
+    errors.value = [];
+}
+
+const hideAccountRemoveModal = function(e: Event) {
+    const target = e.currentTarget as Element;
+    if(target?.classList.contains('disabled') || target?.classList.contains('stop-event')) {
+        return;
+    }
+    isShowAccountRemoveModal.value = false;
+    inputPassword.value = '';
+};
+
+const handlerRemoveAccount = async function(e: Event) {
+    const target = e.currentTarget as Element;
+    if(target?.classList.contains('disabled')) {
+        return;
+    }
+    errors.value = [];
+    isRequest.value = true;
+    
+    // Запрос на удаление аккаунта
+    const result = await request(app, `${app.basicUrl}/account`, 'DELETE',
+        JSON.stringify({
+            password: inputPassword.value,
+            token: app.token,
+            aud: app.aud
+        }),
+        {app, user},
+        false
+    );
+
+    isRequest.value = false;
+    
+    if (result.errors.length === 0) {
+        await router.push({name: 'home'});
+    } else {
+        inputPassword.value = '';
+        errors.value = result.errors;
+    }
+}
 </script>
 
 <template>
+<div class="flex justify-between">
+    <h2>Список доступных фильмов</h2>
+    <button
+        class="px-4 py-2 bg-red-100 text-red-700 hover:bg-red-300 hover:text-red-900 rounded-lg"
+        @click="showAccountRemoveModal"
+    >
+        Удалить аккаунт
+    </button>
+</div>
+
 <table class="container" @click="handlerFilms">
     <caption>Показано {{paginationAccount.elementsNumberOnActivePage}} фильмов из {{paginationAccount.itemsNumberTotal}}</caption>
     <thead>
@@ -167,10 +223,16 @@ const handlerRemoveFilm = async function(e: Event) {
     v-if="isShowFilmRemoveModal"
     :isRequest="isRequest"
     :filmName="filmName"
-    :filmId="filmId"
     :hideFilmRemoveModal="hideFilmRemoveModal"
     :handlerRemoveFilm="handlerRemoveFilm"
-    :removeFilmPassword="removeFilmPassword"
+    v-model:password="inputPassword"
+    :errors="errors"
+/>
+<AccountRemoveModal
+    v-if="isShowAccountRemoveModal"
+    :isRequest="isRequest"
+    :hideAccountRemoveModal="hideAccountRemoveModal"
+    :handlerRemoveAccount="handlerRemoveAccount"
     v-model:password="inputPassword"
     :errors="errors"
 />
