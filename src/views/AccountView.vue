@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { inject, watch } from 'vue';
+import { inject, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import FilmsTable from '../components/account/FilmsTable.vue';
+import AccountRemoveModal from '../components/account/AccountRemoveModal.vue';
 import BreadCrumb from '../components/BreadCrumb.vue';
 import PaginationNav from '../components/PaginationNav.vue';
 import Dropdown from '../components/Dropdown.vue';
@@ -29,6 +30,9 @@ const app = inject('app') as App;
 const user = inject('user') as User;
 const filmsAccount = inject('filmsAccount') as Films;
 const paginationAccount = inject('paginationAccount') as Pagination;
+
+// Отслеживает открытие модального окна для удаления аккаунта
+const isShowAccountRemoveModal = ref(false)
 
 // Запрос на получение списка фильмов
 const requestAccount = async function() {
@@ -67,6 +71,11 @@ const changeNumberOfFilmsOnPage = function(newNumber: number) {
     goToFirstPage();
 }
 
+// Открывает/Закрывает модальное окно для удаления аккаунта
+const toggleShowAccountRemoveModal = function() {
+    isShowAccountRemoveModal.value = !isShowAccountRemoveModal.value
+}
+
 // Получаем данные при монтировании компоненты
 requestAccount();
 
@@ -78,17 +87,29 @@ watch(
 </script>
 
 <template>
-    <BreadCrumb :linksList="linksList" />
-    <h1>{{user.login}}. Личный кабинет</h1>
-    
-    <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
-    <template v-else>
+<BreadCrumb :linksList="linksList" />
+<h1>{{user.login}}. Личный кабинет</h1>
+
+<Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
+<template v-else>
+    <div class="flex justify-between">
         <Dropdown
             class="mb-2"
             :itemsNumberOnPage="paginationAccount.itemsNumberOnPage"
             :changeNumber="changeNumberOfFilmsOnPage"
             :buttonName="'Число фильмов на странице'"/>
-        <FilmsTable :requestAccount="requestAccount" :goToFirstPage="goToFirstPage"/>
-        <PaginationNav :routeName="'account'" :pagination="paginationAccount"/>
-    </template>
+        <button
+            class="px-4 py-2 bg-red-100 text-red-700 hover:bg-red-300 hover:text-red-900 rounded-lg"
+            @click="toggleShowAccountRemoveModal"
+        >
+            Удалить аккаунт
+        </button>
+    </div>
+    <FilmsTable :requestAccount="requestAccount" :goToFirstPage="goToFirstPage"/>
+    <PaginationNav :routeName="'account'" :pagination="paginationAccount"/>
+    <AccountRemoveModal
+        v-if="isShowAccountRemoveModal"
+        :toggleShowAccountRemoveModal="toggleShowAccountRemoveModal"
+    />
+</template>
 </template>

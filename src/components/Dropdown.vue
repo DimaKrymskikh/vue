@@ -37,7 +37,7 @@ const handlerSelect = function(e: Event) {
             {{buttonName}}
         </button>
         <ul
-            class="absolute w-1/6 bg-white"
+            class="absolute w-full bg-white"
             @click="handlerSelect"
             v-if="isShowList"
         >

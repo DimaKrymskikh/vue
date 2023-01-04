@@ -76,17 +76,19 @@ watch(
 </script>
 
 <template>
-    <BreadCrumb :linksList="linksList" />
-    <h1>Каталог</h1>
-    
-    <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
-    <template v-else>
+<BreadCrumb :linksList="linksList" />
+<h1>Каталог</h1>
+
+<Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
+<template v-else>
+    <div class="flex justify-between">
         <Dropdown
             class="mb-2"
             :itemsNumberOnPage="paginationCatalog.itemsNumberOnPage"
             :changeNumber="changeNumberOfFilmsOnPage"
             :buttonName="'Число фильмов на странице'"/>
-        <FilmsTable :requestCatalog="requestCatalog" :goToFirstPage="goToFirstPage"/>
-        <PaginationNav :routeName="'catalog'" :pagination="paginationCatalog"/>
-    </template>
+    </div>
+    <FilmsTable :requestCatalog="requestCatalog" :goToFirstPage="goToFirstPage"/>
+    <PaginationNav :routeName="'catalog'" :pagination="paginationCatalog"/>
+</template>
 </template>

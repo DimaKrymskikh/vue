@@ -2,7 +2,6 @@
 import { inject, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import FilmRemoveModal from './FilmRemoveModal.vue';
-import AccountRemoveModal from './AccountRemoveModal.vue';
 import type { Films } from '../../stores/films';
 import type { Pagination } from '../../stores/pagination';
 
@@ -21,8 +20,6 @@ const { requestAccount, goToFirstPage } = defineProps<{
 const isShowFilmRemoveModal = ref(false);
 // Содержит id удаляемого фильма
 const removeFilmId = ref(0);
-// Отслеживает открытие модального окна для удаления аккаунта
-const isShowAccountRemoveModal = ref(false)
 
 // Фильтрует фильмы 
 // Запрос отправляется нажатием на клавишу "Enter"
@@ -48,22 +45,11 @@ const toggleShowFilmRemoveModal = function() {
     isShowFilmRemoveModal.value = !isShowFilmRemoveModal.value
 }
 
-// Открывает/Закрывает модальное окно для удаления аккаунта
-const toggleShowAccountRemoveModal = function() {
-    isShowAccountRemoveModal.value = !isShowAccountRemoveModal.value
-}
-
 </script>
 
 <template>
 <div class="flex justify-between">
     <h2>Список доступных фильмов</h2>
-    <button
-        class="px-4 py-2 bg-red-100 text-red-700 hover:bg-red-300 hover:text-red-900 rounded-lg"
-        @click="toggleShowAccountRemoveModal"
-    >
-        Удалить аккаунт
-    </button>
 </div>
 
 <table class="container" @click="handlerFilms">
@@ -117,9 +103,5 @@ const toggleShowAccountRemoveModal = function() {
     :toggleShowFilmRemoveModal="toggleShowFilmRemoveModal"
     :removeFilmId="removeFilmId"
     :requestAccount="requestAccount"
-/>
-<AccountRemoveModal
-    v-if="isShowAccountRemoveModal"
-    :toggleShowAccountRemoveModal="toggleShowAccountRemoveModal"
 />
 </template>
