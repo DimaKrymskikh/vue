@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
 import { request } from '../../tools/request';
 import Spinner from '../Spinner.vue';
 import type { App } from '../../stores/app';
 import type { Films } from '../../stores/films';
 import type { Pagination } from '../../stores/pagination';
 
-const router = useRouter();
-const route = useRoute();
-
 const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
 const paginationCatalog = inject('paginationCatalog') as Pagination;
 
-const { requestCatalog } = defineProps<{
-    requestCatalog: Function
+const { requestCatalog, goToFirstPage } = defineProps<{
+    requestCatalog: Function,
+    goToFirstPage: Function
 }>();
 
+// Запрос, добавляющий фильм с id=filmId в список пользователя
 const requestAddFilm = async function(filmId: number) {
     return await request(app, `${app.basicUrl}/userFilm/${filmId}`, 'POST',
         JSON.stringify({
@@ -29,6 +27,7 @@ const requestAddFilm = async function(filmId: number) {
     );
 };
 
+// Обработчик манипуляций с таблицей фильмов
 const handlerAddFilm = async function(e: Event) {
     const target = e.target as Element;
     const isTargetAddFilm = target.classList.contains("add-film");
@@ -55,17 +54,13 @@ const handlerAddFilm = async function(e: Event) {
     }
 }
 
+// Фильтрует фильмы 
+// Запрос отправляется нажатием на клавишу "Enter"
 const putFilms = async function(e: KeyboardEvent) {
     if(e.key.toLowerCase() !== "enter") {
         return;
     }
-    // Если поиск ведётся на 1-й странице, то делаем прямой запрос методом requestCatalog
-    if (parseInt(route.params.pageId as string, 10) === 1) {
-        await requestCatalog();
-    // иначе используем router.push
-    } else {
-        await router.push({name: 'catalog', params: {pageId: 1}});
-    }
+    goToFirstPage();
 }
 </script>
 

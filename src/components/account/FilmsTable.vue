@@ -12,8 +12,9 @@ const route = useRoute();
 const filmsAccount = inject('filmsAccount') as Films;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
-const { requestAccount } = defineProps<{
-    requestAccount: Function
+const { requestAccount, goToFirstPage } = defineProps<{
+    requestAccount: Function,
+    goToFirstPage: Function
 }>();
 
 // Отслеживает открытие модального окна для удаления фильма
@@ -29,18 +30,13 @@ const putFilms = async function(e: KeyboardEvent) {
     if(e.key.toLowerCase() !== "enter") {
         return;
     }
-    // Если поиск ведётся на 1-й странице, то делаем прямой запрос методом requestAccount
-    if (parseInt(route.params.pageId as string, 10) === 1) {
-        await requestAccount();
-    // иначе используем router.push
-    } else {
-        await router.push({name: 'account', params: {pageId: 1}});
-    }
+    goToFirstPage();
 };
 
 // Отслеживает события таблицы фильмов
 const handlerFilms = function(e: Event) {
     const target = e.target as Element;
+    // Показывает модальное окно для удаления фильма
     if(target?.classList.contains('removal-film')) {
         removeFilmId.value = target.getAttribute('data-film-id') as any as number;
         toggleShowFilmRemoveModal();

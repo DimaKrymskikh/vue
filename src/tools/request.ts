@@ -16,7 +16,7 @@ interface RequestBody {
  */
 export async function request(app: App, url: string, method: string, body: BodyInit | null, ob: RequestBody = {}, isSpinner = true) {
     // Запускается большой спиннер только, если в этом есть необходимость
-    app.isRequest = true && isSpinner;
+    app.isRequest = isSpinner;
     
     const response = await fetch(url, {
         method,

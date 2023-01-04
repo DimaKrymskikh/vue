@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { inject, watch } from 'vue';
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router';
 import FilmsTable from '../components/account/FilmsTable.vue';
 import BreadCrumb from '../components/BreadCrumb.vue';
 import PaginationNav from '../components/PaginationNav.vue';
+import Dropdown from '../components/Dropdown.vue';
 import Spinner from '../components/Spinner.vue';
 import { request } from '../tools/request';
 
@@ -13,6 +14,10 @@ import type { User } from '../stores/user';
 import type { Films } from '../stores/films';
 import type { Pagination } from '../stores/pagination';
 
+const router = useRouter();
+const route = useRoute();
+
+// Список для хлебных крошек
 const linksList = [{
             link: '/' as RouteLocationRaw,
             text: 'Главная страница'
@@ -25,10 +30,9 @@ const user = inject('user') as User;
 const filmsAccount = inject('filmsAccount') as Films;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
-const route = useRoute();
-
+// Запрос на получение списка фильмов
 const requestAccount = async function() {
-    //
+    // Запрос на сервер для получения списка фильмов и параметров пагинации
     await request(app, `${app.basicUrl}/account/index/${route.params.pageId}/${paginationAccount.itemsNumberOnPage}`, 'POST',
         JSON.stringify({
             token: app.token,
@@ -43,8 +47,30 @@ const requestAccount = async function() {
     );
 };
 
+// Осуществляет переход на 1-ю страницу
+// router.push не может выполнить переход с 1-й страницы на 1-ю после изменения списка фильмов
+const goToFirstPage = async function() {
+    // Если находились на 1-й странице, то используем requestCatalog
+    if (parseInt(route.params.pageId as string, 10) === 1) {
+        await requestAccount();
+    // Если находились не на 1-й странице, то используем router.push
+    } else {
+        await router.push({name: 'account', params: {pageId: 1}});
+    }
+}
+
+// Изменяет число фильмов на странице
+const changeNumberOfFilmsOnPage = function(newNumber: number) {
+    // Сохраняем новое число фильмов на странице в хранилище paginationAccount
+    paginationAccount.itemsNumberOnPage = newNumber;
+    // Получаем данные с сервера для 1-й страницы
+    goToFirstPage();
+}
+
+// Получаем данные при монтировании компоненты
 requestAccount();
 
+// Отслеживаем пагинацию
 watch(
     () => route.params.pageId,
     requestAccount
@@ -57,7 +83,12 @@ watch(
     
     <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
-        <FilmsTable :requestAccount="requestAccount" />
+        <Dropdown
+            class="mb-2"
+            :itemsNumberOnPage="paginationAccount.itemsNumberOnPage"
+            :changeNumber="changeNumberOfFilmsOnPage"
+            :buttonName="'Число фильмов на странице'"/>
+        <FilmsTable :requestAccount="requestAccount" :goToFirstPage="goToFirstPage"/>
         <PaginationNav :routeName="'account'" :pagination="paginationAccount"/>
     </template>
 </template>
