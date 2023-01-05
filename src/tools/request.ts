@@ -1,32 +1,24 @@
+import axios from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import type { App } from '../stores/app';
 
 interface RequestBody {
     [index: string]: any;
 }
 
-/**
- * Оболочка над fetch
- * @param {App} app
- * @param {String} url
- * @param {String} method
- * @param {BodyInit | null} body - Строка JSON
- * @param {Object} ob - Содержит список элементов, которые будут обновлены
- * @param {Boolean} isSpinner - Нужно ли запускать большой спиннер
- * @returns {Object|Boolean}
- */
-export async function request(app: App, url: string, method: string, body: BodyInit | null, ob: RequestBody = {}, isSpinner = true) {
+export async function request(app: App, url: string, method: string, data: string | null, ob: RequestBody = {}, isSpinner = true) {
     // Запускается большой спиннер только, если в этом есть необходимость
     app.isRequest = isSpinner;
     
-    const response = await fetch(url, {
+    const response = await axios(url, {
         method,
         headers: {
             'Content-Type': 'application/json'
         },
-        body
+        data
     });
         
-    const result = await response.json();
+    const result = await response.data;
 /*    
     if (response.status === 403) {
         pageReboot(result.message); 
