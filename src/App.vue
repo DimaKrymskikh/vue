@@ -16,7 +16,7 @@ const paginationAccount = inject('paginationAccount') as Pagination;
 </script>
 
 <template>
-    <nav class="bg-orange-300 shadow shadow-orange-200">
+    <nav id="main-nav" class="bg-orange-300 shadow shadow-orange-200">
         <div class="lg:container">
             <ul class="flex flex-row">
                 <li class="px-2 h-10 flex">
