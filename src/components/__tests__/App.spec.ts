@@ -1,5 +1,5 @@
-import { beforeEach, describe, it, expect, vi } from "vitest";
-import { mount, flushPromises } from "@vue/test-utils";
+import { describe, it, expect, vi } from "vitest";
+import { mount } from "@vue/test-utils";
 
 import router from "../../router";
 import App from "../../App.vue";
@@ -26,7 +26,7 @@ describe("App", () => {
         }
     };
     
-    it("Проверка меню для неаутентифицированного пользователя", async () => {
+    it("Проверка меню для неаутентифицированного пользователя", () => {
         const wrapper = mount(App, wrapperOptions);
         const mainNav = wrapper.find('#main-nav');
         
