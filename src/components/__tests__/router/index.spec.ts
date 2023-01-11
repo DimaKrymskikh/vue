@@ -105,7 +105,7 @@ describe("router", () => {
         }
     });
 
-    it("Используем router.push", async () => {
+    it("Используем router.push с url", async () => {
         router.push('/');
         await flushPromises();
         expect(wrapper.html()).toContain('Home');
@@ -136,6 +136,36 @@ describe("router", () => {
         router.push('/filmCard/3147');
         await flushPromises();
         expect(wrapper.text()).toContain('FilmCard 3147');
+    });
+
+    it("Используем router.push с объектом", async () => {
+        router.push({ name: "home" });
+        await flushPromises();
+        expect(wrapper.html()).toContain('Home');
+        
+        router.push({name: 'catalog', params: {pageId: 12}});
+        await flushPromises();
+        expect(wrapper.text()).toContain('Catalog 12');
+        
+        router.push({name: 'account', params: {pageId: 25}});
+        await flushPromises();
+        expect(wrapper.text()).toContain('Account 25');
+        
+        router.push({ name: "login" });
+        await flushPromises();
+        expect(wrapper.html()).toContain('Login');
+        
+        router.push({ name: "logout" });
+        await flushPromises();
+        expect(wrapper.html()).toContain('Logout');
+        
+        router.push({ name: "register" });
+        await flushPromises();
+        expect(wrapper.html()).toContain('Register');
+        
+        router.push({name: 'filmCard', params: {filmId: 137}});
+        await flushPromises();
+        expect(wrapper.text()).toContain('FilmCard 137');
     });
     
     it("Клик по ссылке", async () => {
