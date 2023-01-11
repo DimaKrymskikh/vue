@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 
 import HomeView from "../../../views/HomeView.vue";
+import Spinner from '../../../components/Spinner.vue';
 
 describe("HomeView", () => {
     it("Данные загружены", () => {
@@ -34,7 +35,7 @@ describe("HomeView", () => {
             }
         });
         const h1 = wrapper.find('h1');
-        const spinner = wrapper.find('#spinner');
+        const spinner = wrapper.findComponent(Spinner);
        
         expect(h1.text()).toContain("Главная страница");
         expect(h1.exists()).toBe(true);

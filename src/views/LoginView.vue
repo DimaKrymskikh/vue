@@ -26,8 +26,6 @@ const errors = ref([]);
 const router = useRouter();
         
 async function handlerLogin(e: Event) {
-    e.preventDefault();
-    
     const currentTarget = e.currentTarget as Element;
     
     if (currentTarget?.classList.contains('disabled')) {
@@ -54,7 +52,7 @@ async function handlerLogin(e: Event) {
 </script>
 
 <template>
-<BreadCrumb :linksList="linksList" />
+    <BreadCrumb :linksList="linksList" />
     <h1>Вход</h1>
     
     <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
