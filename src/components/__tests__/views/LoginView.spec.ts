@@ -1,39 +1,36 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import type { Mock } from "vitest";
 
+import { setActivePinia, createPinia } from 'pinia';
 import LoginView from "../../../views/LoginView.vue";
 import BreadCrumb from "../../../components/BreadCrumb.vue";
 import Spinner from '../../../components/Spinner.vue';
 import ErrorsList from '../../../components/ErrorsList.vue';
 import router from "../../../router";
+import { useAppStore } from '../../../stores/app';
+import { useUserStore } from '../../../stores/user';
 
 import axios from 'axios';
 vi.mock('axios');
 
 describe("LoginView", () => {
+    beforeEach(() => {
+        setActivePinia(createPinia());
+    });
     afterEach(async () => {
         await (axios as any as Mock).mockClear();
     });
     
-    const wrapperLoginViewOptions = {
-        global: {
-            provide: {
-                app: {
-                    isRequest: false, 
-                    basicUrl: 'test',
-                    setData: vi.fn()
-                },
-                user: {
-                    setData: vi.fn()
-                },
-            },
-            plugins: [router]
-        }
-    };
-    
     it("Монтирование компоненты", () => {
-        const wrapper = mount(LoginView, wrapperLoginViewOptions);
+        const user = useUserStore();
+        const app = useAppStore();
+        const wrapper = mount(LoginView, {
+            global: {
+                provide: { app, user },
+                plugins: [router]
+            }
+        });
 
         // Проверяем заголовок страницы
         expect(wrapper.get('h1').text()).toBe("Вход");
@@ -73,10 +70,17 @@ describe("LoginView", () => {
         }
         await (axios as any as Mock).mockResolvedValue(responseLogin);
         
-        const wrapper = mount(LoginView, wrapperLoginViewOptions);
+        const user = useUserStore();
+        const app = useAppStore();
+        const wrapper = mount(LoginView, {
+            global: {
+                provide: { app, user },
+                plugins: [router]
+            }
+        });
         
         // Кнопка "Вход" разблокируется, если оба поля login и password заполнены
-        const loginButton = wrapper.get('#login-button');
+        const loginButton = wrapper.find('#login-button');
         const inputLogin = wrapper.get('[name=login]');
         const inputPassword = wrapper.get('[name=password]');
         
@@ -90,6 +94,8 @@ describe("LoginView", () => {
         await flushPromises();
         // Запрос не отправляется
         expect(axios).toHaveBeenCalledTimes(0);
+        // Отсутствует спиннер
+        expect(wrapper.findComponent(Spinner).exists()).toBe(false);
         
         // Поле login заполнено, поле password нет
         await inputLogin.setValue('TestLogin');
@@ -112,6 +118,8 @@ describe("LoginView", () => {
         expect(loginButton.classes('disabled')).toBe(true);
         // Кликаем заблокированную кнопку
         await loginButton.trigger('click');
+        // Отсутствует спиннер
+        expect(wrapper.findComponent(Spinner).exists()).toBe(false);
         await flushPromises();
         // Запрос не отправляется
         expect(axios).toHaveBeenCalledTimes(0);
@@ -124,9 +132,16 @@ describe("LoginView", () => {
         expect(loginButton.classes('disabled')).toBe(false);
         // Кликаем кнопку "Вход"
         await loginButton.trigger('click');
+        // Появляется спиннер
+        expect(wrapper.findComponent(Spinner).exists()).toBe(true);
+        // Кнопка "Вход" исчезает
+        expect(wrapper.find('#login-button').exists()).toBe(false);
+        
         await flushPromises();
         // Запрос отправился
         expect(axios).toHaveBeenCalledTimes(1);
+        // Спиннер исчезает
+        expect(wrapper.findComponent(Spinner).exists()).toBe(false);
     });
     
     it("Выполняется запрос с ошибочными данными", async () => {
@@ -140,10 +155,19 @@ describe("LoginView", () => {
         }
         await (axios as any as Mock).mockResolvedValue(responseLogin);
         
-        const wrapper = mount(LoginView, wrapperLoginViewOptions);
+        const user = useUserStore();
+        const app = useAppStore();
+        const wrapper = mount(LoginView, {
+            global: {
+                provide: { app, user },
+                plugins: [router]
+            }
+        });
         // Кнопка "Вход" заблокирована
         const loginButton = wrapper.get('#login-button');
         expect(loginButton.classes('disabled')).toBe(true);
+        // Отсутствует спиннер
+        expect(wrapper.findComponent(Spinner).exists()).toBe(false);
         // Сообщения об ошибках отсутствуют
         const errorsList = wrapper.getComponent(ErrorsList);
         expect(errorsList.isVisible()).toBe(false);
@@ -160,16 +184,20 @@ describe("LoginView", () => {
         
         // Отправляем данные на сервер
         await loginButton.trigger('click');
+        // Появляется спиннер
+        expect(wrapper.findComponent(Spinner).exists()).toBe(true);
         await flushPromises();
         // Запрос отправился
         expect(axios).toHaveBeenCalledTimes(1);
+        // Спиннер исчезает
+        expect(wrapper.findComponent(Spinner).exists()).toBe(false);
         // Логин не изменился
-        expect((inputLogin.element as HTMLInputElement).value).toBe('TestLogin');
+        expect((wrapper.find('[name=login]').element as HTMLInputElement).value).toBe('TestLogin');
         // Пароль очистился
-        expect((inputPassword.element as HTMLInputElement).value).toBe('');
+        expect((wrapper.find('[name=password]').element as HTMLInputElement).value).toBe('');
         // Появляется сообщение об ошибке
-        expect(errorsList.isVisible()).toBe(true);
-        expect(errorsList.text()).toBe("Неправильный логин или пароль");
+        expect(wrapper.findComponent(ErrorsList).exists()).toBe(true);
+        expect(wrapper.findComponent(ErrorsList).text()).toBe("Неправильный логин или пароль");
     });
     
     it("Запрос с правильным паролем", async () => {
@@ -191,7 +219,14 @@ describe("LoginView", () => {
         // На какую страницу будет перенаправление
         const push = vi.spyOn(router, 'push');
         
-        const wrapper = mount(LoginView, wrapperLoginViewOptions);
+        const user = useUserStore();
+        const app = useAppStore();
+        const wrapper = mount(LoginView, {
+            global: {
+                provide: { app, user },
+                plugins: [router]
+            }
+        });
        
         // Кнопка "Вход" заблокирована
         const loginButton = wrapper.get('#login-button');
@@ -208,10 +243,17 @@ describe("LoginView", () => {
         
         // Кликаем кнопку "Вход"
         await loginButton.trigger('click');
+        // Появляется спиннер
+        expect(wrapper.findComponent(Spinner).exists()).toBe(true);
+        
         await flushPromises();
         // Запрос отправляется
         expect(axios).toHaveBeenCalledTimes(1);
         // Переход на главную страницу
         expect(push).toHaveBeenCalledWith({ name: "home" });
+        // Полученные с сервера данные сохранены в хранилищах
+        expect(app.token).toBe("Некоторый токен");
+        expect(app.isGuest).toBe(false);
+        expect(user.login).toBe("TestLogin");
     });
 });
