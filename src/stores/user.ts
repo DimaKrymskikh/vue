@@ -28,7 +28,7 @@ export const useUserStore = defineStore("user", () => {
         if (!/^[A-Z]/.test(text)) {
             errors.push('Логин должен начинаться с заглавной латинской буквы.');
         }
-        if (!/^\w{4,18}$/.test(text)) {
+        if (text.length < 4 || text.length > 18) {
             errors.push('Логин должен состоять из 4 - 18 символов.');
         }
         var matches = /(\W)/.exec(text);

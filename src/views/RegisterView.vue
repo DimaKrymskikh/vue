@@ -91,7 +91,7 @@ async function handlerRegistration(e: Event) {
         }),
         {app, user}
     );
-   
+
     if (!result.errors.length) {
         router.push({ name: 'home' });
     } else {
@@ -110,18 +110,19 @@ async function handlerRegistration(e: Event) {
     <template v-else>
         <InputLabel :isHidden="login.isHidden" :errorText="login.loginError">
             Логин:
-            <input type="text" v-model="inputLogin" />
+            <input type="text" name="login" v-model="inputLogin" />
         </InputLabel>
         <InputLabel :isHidden="password.isHidden" :errorText="password.passwordError">
             Пароль:
-            <input type="password" v-model="inputPassword" />
+            <input type="password" name="password" v-model="inputPassword" />
         </InputLabel>
         <InputLabel :isHidden="verification.isHidden" :errorText="verificationError">
             Подтверждение пароля:
-            <input type="password" v-model="inputVerification" />
+            <input type="password" name="verification" v-model="inputVerification" />
         </InputLabel>
         <div class="mb-3 w-1/3 text-right">
             <button
+                id="register-button"
                 class="p-1 w-48 rounded-lg"
                 :class="login.isLogin && password.isPassword && verification.isVerification ? 'bg-orange-300 text-orange-700 hover:bg-orange-200 text-orange-600' : 'disabled'"
                 @click="handlerRegistration"
