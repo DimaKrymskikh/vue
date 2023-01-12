@@ -27,5 +27,5 @@ export const useAppStore = defineStore("app", () => {
         }
     };
     
-    return { basicUrl, aud, token, isGuest, setData }
+    return { basicUrl, aud, token, isGuest, isRequest, setData }
 });
