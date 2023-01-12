@@ -430,5 +430,9 @@ describe("RegisterView", () => {
         expect(axios).toHaveBeenCalledTimes(1);
         // Переход на главную страницу
         expect(push).toHaveBeenCalledWith({ name: "home" });
+        // Полученные с сервера данные сохранены в хранилищах
+        expect(app.token).toBe("Некоторый токен");
+        expect(app.isGuest).toBe(false);
+        expect(user.login).toBe("TestLogin");
     });
 });
