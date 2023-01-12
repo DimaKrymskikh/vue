@@ -1,33 +1,31 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 
+import { setActivePinia, createPinia } from 'pinia';
 import router from "../../router";
 import App from "../../App.vue";
-
+import { useAppStore } from '../../stores/app';
+import { paginationCatalogStore, paginationAccountStore } from '../../stores/pagination';
 
 describe("App", () => {
-    
-    const wrapperOptions = {
-        global: {
-            provide: {
-                app: {
-                    isRequest: false,
-                    basicUrl: 'test',
-                    isGuest: true
-                },
-                paginationCatalog: {
-                    activePage: 2
-                },
-                paginationAccount: {
-                    activePage: 1
-                },
-            },
-            plugins: [router]
-        }
-    };
+    beforeEach(() => {
+        setActivePinia(createPinia());
+    });
     
     it("Проверка меню для неаутентифицированного пользователя", () => {
-        const wrapper = mount(App, wrapperOptions);
+        const app = useAppStore();
+        const paginationCatalog = paginationCatalogStore();
+        const paginationAccount = paginationAccountStore();
+        
+        paginationCatalog.activePage = 2;
+        paginationAccount.activePage = 1;
+        
+        const wrapper = mount(App, {
+            global: {
+                provide: { app, paginationCatalog, paginationAccount },
+                plugins: [router]
+            }
+        });
         const mainNav = wrapper.find('#main-nav');
         
         /**
@@ -49,17 +47,29 @@ describe("App", () => {
     });
     
     it("Проверка меню для аутентифицированного пользователя", () => {
+        const app = useAppStore();
+        const paginationCatalog = paginationCatalogStore();
+        const paginationAccount = paginationAccountStore();
+        
         // Делаем пользователя аутентифицированным
-        wrapperOptions.global.provide.app.isGuest = false;
-        const wrapper = mount(App, wrapperOptions);
+        app.isGuest = false;
+        paginationCatalog.activePage = 4;
+        paginationAccount.activePage = 7;
+        
+        const wrapper = mount(App, {
+            global: {
+                provide: { app, paginationCatalog, paginationAccount },
+                plugins: [router]
+            }
+        });
         const mainNav = wrapper.find('#main-nav');
         
         expect(mainNav.find('#house-svg').isVisible()).toBe(true);
         expect(mainNav.find('a[href="/"').isVisible()).toBe(true);
         expect(mainNav.text()).toContain('Каталог');
-        expect(mainNav.find('a[href="/catalog/2').exists()).toBe(true);
+        expect(mainNav.find('a[href="/catalog/4').exists()).toBe(true);
         expect(mainNav.text()).toContain('ЛК');
-        expect(mainNav.find('a[href="/account/1').exists()).toBe(true);
+        expect(mainNav.find('a[href="/account/7').exists()).toBe(true);
         expect(mainNav.text()).not.toContain('Вход');
         expect(mainNav.find('a[href="/login').exists()).toBe(false);
         expect(mainNav.text()).toContain('Выход');
