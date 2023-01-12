@@ -18,7 +18,7 @@ vi.mock('axios');
 describe("RegisterView", () => {
     beforeEach(() => {
         setActivePinia(createPinia());
-    })
+    });
     afterEach(async () => {
         await (axios as any as Mock).mockClear();
     });

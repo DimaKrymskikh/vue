@@ -1,44 +1,48 @@
-import { describe, it, expect } from "vitest";
-
+import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 
+import { setActivePinia, createPinia } from 'pinia';
 import HomeView from "../../../views/HomeView.vue";
 import Spinner from '../../../components/Spinner.vue';
+import { useAppStore } from '../../../stores/app';
 
 describe("HomeView", () => {
+    beforeEach(() => {
+        setActivePinia(createPinia());
+    });
+    
     it("Данные загружены", () => {
+        const app = useAppStore();
+        
         const wrapper = mount(HomeView, {
             global: {
-                provide: {
-                    'app': {
-                        isRequest: false
-                    }
-                }
+                provide: { app }
             }
         });
-        const h1 = wrapper.get('h1');
-        const spinner = wrapper.find('#spinner');
         
+        // Отрисовывается название страницы
+        const h1 = wrapper.get('h1');
         expect(h1.text()).toContain("Главная страница");
         expect(h1.isVisible()).toBe(true);
-        expect(spinner.exists()).toBe(false);
+        // Спиннер отсутствует
+        expect(wrapper.findComponent(Spinner).exists()).toBe(false);
     });
     
     it("Выполняется запрос", () => {
+        const app = useAppStore();
+        app.isRequest = true;
+        
         const wrapper = mount(HomeView, {
             global: {
-                provide: {
-                    'app': {
-                        isRequest: true
-                    }
-                }
+                provide: { app },
             }
         });
-        const h1 = wrapper.find('h1');
-        const spinner = wrapper.findComponent(Spinner);
-       
+        
+        // Отрисовывается название страницы
+        const h1 = wrapper.get('h1');
         expect(h1.text()).toContain("Главная страница");
-        expect(h1.exists()).toBe(true);
-        expect(spinner.exists()).toBe(true);
+        expect(h1.isVisible()).toBe(true);
+        // Спиннер присутствует
+        expect(wrapper.findComponent(Spinner).exists()).toBe(true);
     });
 });
