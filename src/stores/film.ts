@@ -2,12 +2,12 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export interface Film {
-    filmId: number;
-    title: string;
-    description: string;
-    releaseYear: number;
-    actorNames: Array<string>;
-    language: string;
+    filmId?: number;
+    title?: string;
+    description?: string;
+    releaseYear?: number;
+    actorNames?: Array<string>;
+    language?: string;
     [index: string]: any;
 }
 
