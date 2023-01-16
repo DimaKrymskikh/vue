@@ -3,7 +3,6 @@ import { mount } from "@vue/test-utils";
 
 import { setActivePinia, createPinia } from 'pinia';
 import { filmsCatalogStore, filmsAccountStore } from "../../../stores/films";
-import type { Films } from '../../../stores/films';
 
 const catalogData = [{
     id: 38,

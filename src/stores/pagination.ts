@@ -11,7 +11,6 @@ export interface Pagination {
     elementsNumberOnActivePage: number;
     setData: Function;
     getPageAfterRemoveFilm: Function;
-    isHiddenPagination: Function;
     [index: string]: any;
 }
 
@@ -52,13 +51,6 @@ const paginationModel = function() {
     const getPageAfterRemoveFilm = function(this: Pagination) {
         return this.elementsNumberOnActivePage - 1 ? this.activePage : this.activePage - 1;
     };
-
-    /**
-     * Если нет элементов в списке, то возвращает true, чтобы скрыть пагинацию на странице
-     */
-    const isHiddenPagination = function(this: Pagination) {
-        return !this.itemsNumberTotal;
-    };
     
     return {
         activePage,
@@ -70,7 +62,6 @@ const paginationModel = function() {
         elementsNumberOnActivePage,
         setData,
         getPageAfterRemoveFilm,
-        isHiddenPagination
     };
 }
 
