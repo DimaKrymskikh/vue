@@ -2,15 +2,12 @@
 import { inject, computed } from 'vue';
 import { RouterLink } from "vue-router";
 import type { RouteRecordName } from 'vue-router';
-import type { App } from '../stores/app';
 import type { Pagination } from '../stores/pagination';
 
 const { pagination } = defineProps<{
     pagination: Pagination,
     routeName: RouteRecordName
 }>();
-
-const app = inject('app') as App;
 
 const buttons = computed(() => {
     const arr = [];
