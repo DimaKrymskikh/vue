@@ -27,15 +27,19 @@ describe("Dropdown", () => {
         expect(li).toHaveLength(4);
         // Первый вариант не выбран
         expect(li[0].text()).toBe('10');
+        expect(li[0].attributes('data-number')).toBe('10');
         expect(li[0].classes('select')).toBe(false);
         // Второй вариант не выбран
         expect(li[1].text()).toBe('20');
+        expect(li[1].attributes('data-number')).toBe('20');
         expect(li[1].classes('select')).toBe(false);
         // Третий вариант не выбран
         expect(li[2].text()).toBe('50');
+        expect(li[2].attributes('data-number')).toBe('50');
         expect(li[2].classes('select')).toBe(true);
         // Четвёртый вариант не выбран
         expect(li[3].text()).toBe('100');
+        expect(li[3].attributes('data-number')).toBe('100');
         expect(li[3].classes('select')).toBe(false);
         
         // Второй раз кликаем по кнопке
@@ -79,6 +83,7 @@ describe("Dropdown", () => {
         
         // Кликаем по выбору 20
         await li[1].trigger('click');
+        expect(li[1].attributes('data-number')).toBe('20');
         // Список скрыт
         expect(wrapper.find('ul').exists()).toBe(false);
         // Запрос отправлен с параметром 20
