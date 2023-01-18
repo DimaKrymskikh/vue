@@ -27,7 +27,7 @@ app.provide('filmCard', filmCardStore());
 
 app.mount("#app");
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
     // Если токен не получен и осуществляется переход не на главную страницу (например, нажаты клавиши Ctrl+F5),
     // то переходим на главную страницу
     if (useAppStore().token === '' && to.name !== 'home') {

@@ -3,7 +3,6 @@ import { inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import BreadCrumb from '../components/BreadCrumb.vue';
 import Spinner from '../components/Spinner.vue';
-import { request } from '../tools/request';
 import type { App } from '../stores/app';
 import type { Film } from '../stores/film';
 import type { Pagination } from '../stores/pagination';
@@ -27,13 +26,7 @@ const router = useRouter();
 const route = useRoute();
     
 async function requestFilmCard() {
-    await request(app, `${app.basicUrl}/account/filmCard/${route.params.filmId}`, 'POST',
-        JSON.stringify({
-            token: app.token,
-            aud: app.aud
-        }),
-        {film: filmCard}
-    );
+    await app.request(`account/filmCard/${route.params.filmId}`, 'POST', {}, {film: filmCard});
 };
 
 requestFilmCard();

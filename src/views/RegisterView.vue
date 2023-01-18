@@ -5,7 +5,6 @@ import BreadCrumb from '../components/BreadCrumb.vue';
 import Spinner from '../components/Spinner.vue';
 import ErrorsList from '../components/ErrorsList.vue';
 import InputLabel from '../components/InputLabel.vue';
-import { request } from '../tools/request';
 import type { App } from '../stores/app';
 import type { User } from '../stores/user';
 
@@ -81,14 +80,12 @@ async function handlerRegistration(e: Event) {
         return;
     }
 
-    const result = await request(app, `${app.basicUrl}/register`, 'POST',
-        JSON.stringify({
+    const result = await app.request('register', 'POST',
+        {
             login: login.value.text,
             password: password.value.text,
             verification: verification.value.text,
-            token: app.token,
-            aud: app.aud
-        }),
+        },
         {app, user}
     );
 

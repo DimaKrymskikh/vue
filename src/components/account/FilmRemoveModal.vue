@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import Modal from '../Modal.vue';
 import Spinner from '../Spinner.vue';
 import ErrorsList from '../ErrorsList.vue';
-import { request } from '../../tools/request';
 import type { App } from '../../stores/app';
 import type { Pagination } from '../../stores/pagination';
 
@@ -30,14 +29,7 @@ const removeFilmName = ref('');
 
 // Запрос для получения названия фильма, который собираются удалить
 (async function() {
-    const result = await request(app, `${app.basicUrl}/account/getFilm/${removeFilmId}`, 'POST',
-        JSON.stringify({
-            token: app.token,
-            aud: app.aud
-        }),
-        {},
-        false
-    );
+    const result = await app.request(`account/getFilm/${removeFilmId}`, 'POST', {}, {}, false);
     
     isRequest.value = false;
     // Имя удаляемого фильма
@@ -65,12 +57,10 @@ const handlerRemoveFilm = async function(e: Event) {
     isRequest.value = true;
     
     // Запрос на удаления фильма
-    const result = await request(app, `${app.basicUrl}/userFilm/${removeFilmId}`, 'DELETE',
-        JSON.stringify({
-            token: app.token,
-            aud: app.aud,
+    const result = await app.request(`userFilm/${removeFilmId}`, 'DELETE',
+        {
             password: inputPassword.value
-        }),
+        },
         {},
         false
     );

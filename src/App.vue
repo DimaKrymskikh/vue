@@ -2,7 +2,6 @@
 import { inject } from 'vue';
 import { RouterLink, RouterView } from "vue-router";
 import HouseSvg from './components/svg/HouseSvg.vue';
-import { request } from './tools/request';
 import type { App } from './stores/app';
 import type { Pagination } from './stores/pagination';
 
@@ -11,7 +10,7 @@ const paginationCatalog = inject('paginationCatalog') as Pagination;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
 (async function() {
-    await request(app, `${app.basicUrl}/init/${app.aud}`, 'GET', null, {app});
+    await app.request(`init/${app.aud}`, 'GET', null, {app});
 })();
 </script>
 

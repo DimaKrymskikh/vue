@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import Modal from '../Modal.vue';
 import Spinner from '../Spinner.vue';
 import ErrorsList from '../ErrorsList.vue';
-import { request } from '../../tools/request';
 import type { App } from '../../stores/app';
 import type { User } from '../../stores/user';
 
@@ -45,12 +44,10 @@ const handlerRemoveAccount = async function(e: Event) {
     isRequest.value = true;
     
     // Запрос на удаление аккаунта
-    const result = await request(app, `${app.basicUrl}/account`, 'DELETE',
-        JSON.stringify({
+    const result = await app.request('account', 'DELETE',
+        {
             password: inputPassword.value,
-            token: app.token,
-            aud: app.aud
-        }),
+        },
         {app, user},
         false
     );

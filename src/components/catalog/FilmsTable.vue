@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
-import { request } from '../../tools/request';
 import Spinner from '../Spinner.vue';
 import type { App } from '../../stores/app';
 import type { Films } from '../../stores/films';
@@ -17,14 +16,7 @@ const { requestCatalog, goToFirstPage } = defineProps<{
 
 // Запрос, добавляющий фильм с id=filmId в список пользователя
 const requestAddFilm = async function(filmId: number) {
-    return await request(app, `${app.basicUrl}/userFilm/${filmId}`, 'POST',
-        JSON.stringify({
-            token: app.token,
-            aud: app.aud
-        }),
-        {},
-        false
-    );
+    return await app.request(`userFilm/${filmId}`, 'POST', {}, {}, false);
 };
 
 // Обработчик манипуляций с таблицей фильмов

@@ -7,7 +7,6 @@ import BreadCrumb from '../components/BreadCrumb.vue';
 import PaginationNav from '../components/PaginationNav.vue';
 import Dropdown from '../components/Dropdown.vue';
 import Spinner from '../components/Spinner.vue';
-import { request } from '../tools/request';
 
 import type { RouteLocationRaw } from "vue-router";
 import type { App } from '../stores/app';
@@ -37,13 +36,11 @@ const isShowAccountRemoveModal = ref(false)
 // Запрос на получение списка фильмов
 const requestAccount = async function() {
     // Запрос на сервер для получения списка фильмов и параметров пагинации
-    await request(app, `${app.basicUrl}/account/index/${route.params.pageId}/${paginationAccount.itemsNumberOnPage}`, 'POST',
-        JSON.stringify({
-            token: app.token,
-            aud: app.aud,
+    await app.request(`account/index/${route.params.pageId}/${paginationAccount.itemsNumberOnPage}`, 'POST',
+        {
             sortFilmTitle: filmsAccount.sortFilmTitle,
             sortFilmDescription: filmsAccount.sortFilmDescription
-        }),
+        },
         {
             films: filmsAccount,
             pagination: paginationAccount

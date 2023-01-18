@@ -5,7 +5,6 @@ import BreadCrumb from '../components/BreadCrumb.vue';
 import Spinner from '../components/Spinner.vue';
 import ErrorsList from '../components/ErrorsList.vue';
 import InputLabel from '../components/InputLabel.vue';
-import { request } from '../tools/request';
 import type { App } from '../stores/app';
 import type { User } from '../stores/user';
 
@@ -32,13 +31,11 @@ async function handlerLogin(e: Event) {
         return;
     }
     
-    const result = await request(app, `${app.basicUrl}/login`, 'POST',
-        JSON.stringify({
+    const result = await app.request('login', 'POST',
+        {
             login: inputLogin.value,
             password: inputPassword.value,
-            token: app.token,
-            aud: app.aud
-        }),
+        },
         {app, user}
     );
     
