@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Modal from '../Modal.vue';
-import Spinner from '../Spinner.vue';
-import ErrorsList from '../ErrorsList.vue';
-import type { App } from '../../stores/app';
-import type { Pagination } from '../../stores/pagination';
+import Modal from '@/components/Modal.vue';
+import Spinner from '@/components/Spinner.vue';
+import ErrorsList from '@/components/ErrorsList.vue';
+import type { App } from '@/stores/app';
+import type { Pagination } from '@/stores/pagination';
 
 const router = useRouter();
 
@@ -31,9 +31,11 @@ const removeFilmName = ref('');
 (async function() {
     const result = await app.request(`account/getFilm/${removeFilmId}`, 'POST', {}, {}, false);
     
-    isRequest.value = false;
-    // Имя удаляемого фильма
-    removeFilmName.value = result.title;
+    if (result) {
+        isRequest.value = false;
+        // Имя удаляемого фильма
+        removeFilmName.value = result.title;
+    }
 })();
 
 // Скрывает модальное окно для удаления фильма
@@ -65,6 +67,10 @@ const handlerRemoveFilm = async function(e: Event) {
         false
     );
 
+    if (!result) {
+        return;
+    }
+    
     isRequest.value = false;
     // Если пароль введён верно
     if (result.errors.length === 0) {

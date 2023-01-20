@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { inject, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import FilmsTable from '../components/account/FilmsTable.vue';
-import AccountRemoveModal from '../components/account/AccountRemoveModal.vue';
-import BreadCrumb from '../components/BreadCrumb.vue';
-import PaginationNav from '../components/PaginationNav.vue';
-import Dropdown from '../components/Dropdown.vue';
-import Spinner from '../components/Spinner.vue';
+import FilmsTable from '@/components/account/FilmsTable.vue';
+import AccountRemoveModal from '@/components/account/AccountRemoveModal.vue';
+import BreadCrumb from '@/components/BreadCrumb.vue';
+import PaginationNav from '@/components/PaginationNav.vue';
+import Dropdown from '@/components/Dropdown.vue';
+import Spinner from '@/components/Spinner.vue';
 
 import type { RouteLocationRaw } from "vue-router";
-import type { App } from '../stores/app';
-import type { User } from '../stores/user';
-import type { Films } from '../stores/films';
-import type { Pagination } from '../stores/pagination';
+import type { App } from '@/stores/app';
+import type { User } from '@/stores/user';
+import type { Films } from '@/stores/films';
+import type { Pagination } from '@/stores/pagination';
 
 const router = useRouter();
 const route = useRoute();

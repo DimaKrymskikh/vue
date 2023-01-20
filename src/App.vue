@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { inject } from 'vue';
 import { RouterLink, RouterView } from "vue-router";
-import HouseSvg from './components/svg/HouseSvg.vue';
-import type { App } from './stores/app';
-import type { Pagination } from './stores/pagination';
+import HouseSvg from '@/components/svg/HouseSvg.vue';
+import ForbiddenModal from '@/components/ForbiddenModal.vue';
+import AlertAuthentication from '@/components/AlertAuthentication.vue';
+import type { App } from '@/stores/app';
+import type { Pagination } from '@/stores/pagination';
 
 const app = inject('app') as App;
 const paginationCatalog = inject('paginationCatalog') as Pagination;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
+// Запрос при загрузке приложения
 (async function() {
     await app.request(`init/${app.aud}`, 'GET', null, {app});
 })();
@@ -38,8 +41,11 @@ const paginationAccount = inject('paginationAccount') as Pagination;
             </ul>
         </div>
     </nav>
-    
+
     <main class="lg:container">
+        <AlertAuthentication v-if="app.isGuest"/>
         <RouterView />
     </main>
+    
+    <ForbiddenModal :message="app.errorMessage" v-if="app.isForbidden" />
 </template>

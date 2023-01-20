@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Modal from '../Modal.vue';
-import Spinner from '../Spinner.vue';
-import ErrorsList from '../ErrorsList.vue';
-import type { App } from '../../stores/app';
-import type { User } from '../../stores/user';
+import Modal from '@/components/Modal.vue';
+import Spinner from '@/components/Spinner.vue';
+import ErrorsList from '@/components/ErrorsList.vue';
+import type { App } from '@/stores/app';
+import type { User } from '@/stores/user';
 
 const router = useRouter();
 
@@ -54,6 +54,10 @@ const handlerRemoveAccount = async function(e: Event) {
 
     isRequest.value = false;
     
+    if (!result) {
+        return;
+    }
+    
     // Если пароль введён верно, то переходим на главную страницу
     if (result.errors.length === 0) {
         await router.push({name: 'home'});
@@ -85,4 +89,3 @@ const handlerRemoveAccount = async function(e: Event) {
     </template>
 </Modal>
 </template>
-

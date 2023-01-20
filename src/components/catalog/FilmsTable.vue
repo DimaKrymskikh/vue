@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
-import Spinner from '../Spinner.vue';
-import type { App } from '../../stores/app';
-import type { Films } from '../../stores/films';
-import type { Pagination } from '../../stores/pagination';
+import Spinner from '@/components/Spinner.vue';
+import type { App } from '@/stores/app';
+import type { Films } from '@/stores/films';
+import type { Pagination } from '@/stores/pagination';
 
 const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
@@ -13,11 +13,6 @@ const { requestCatalog, goToFirstPage } = defineProps<{
     requestCatalog: Function,
     goToFirstPage: Function
 }>();
-
-// Запрос, добавляющий фильм с id=filmId в список пользователя
-const requestAddFilm = async function(filmId: number) {
-    return await app.request(`userFilm/${filmId}`, 'POST', {}, {}, false);
-};
 
 // Обработчик манипуляций с таблицей фильмов
 const handlerAddFilm = async function(e: Event) {
@@ -40,10 +35,11 @@ const handlerAddFilm = async function(e: Event) {
     tag.classList.add('hidden');
     spinner.classList.remove('hidden');
 
-    if (await requestAddFilm(tagDataFilmId)) {
-        spinner.classList.add('hidden');
-        checkCircle.classList.remove('hidden');
-    }
+    // Запрос, добавляющий фильм с id=filmId в список пользователя
+    await app.request(`userFilm/${tagDataFilmId}`, 'POST', {}, {}, false);
+    
+    spinner.classList.add('hidden');
+    checkCircle.classList.remove('hidden');
 }
 
 // Фильтрует фильмы 

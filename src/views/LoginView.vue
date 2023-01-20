@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router'
-import BreadCrumb from '../components/BreadCrumb.vue';
-import Spinner from '../components/Spinner.vue';
-import ErrorsList from '../components/ErrorsList.vue';
-import InputLabel from '../components/InputLabel.vue';
-import type { App } from '../stores/app';
-import type { User } from '../stores/user';
+import BreadCrumb from '@/components/BreadCrumb.vue';
+import Spinner from '@/components/Spinner.vue';
+import ErrorsList from '@/components/ErrorsList.vue';
+import InputLabel from '@/components/InputLabel.vue';
+import type { App } from '@/stores/app';
+import type { User } from '@/stores/user';
 
 const linksList = [{
             link: '/',
@@ -38,6 +38,10 @@ async function handlerLogin(e: Event) {
         },
         {app, user}
     );
+    
+    if (!result) {
+        return;
+    }
     
     if (!result.errors.length) {
         router.push({ name: 'home' });

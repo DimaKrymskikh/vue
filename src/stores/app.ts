@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ref } from "vue";
 import { defineStore } from 'pinia';
 
@@ -7,11 +7,12 @@ interface RequestBody {
 }
 
 export interface App {
-    basicUrl: string;
     aud: string;
     token: string;
     isGuest: boolean;
     isRequest: boolean;
+    isForbidden: boolean;
+    errorMessage: string,
     setData: Function;
     [index: string]: any;
 }
@@ -22,6 +23,8 @@ export const useAppStore = defineStore("app", () => {
     const token = ''; 
     const isGuest = true;
     const isRequest = false;
+    const isForbidden = false;
+    const errorMessage = '';
     
     function setData(this: App, data: App) {
         for (let field in data) {
@@ -31,12 +34,6 @@ export const useAppStore = defineStore("app", () => {
             this[field] = data[field];
         }
     };
-    
-    function setDefault(this: App) {
-        this.token = '';
-        this.isGuest = true;
-        this.isRequest = false;
-    }
     
     async function request(this: App, url: string, method: string, data: object | null, ob: RequestBody = {}, isSpinner = true) {
         // Запускается большой спиннер только, если в этом есть необходимость
@@ -57,22 +54,23 @@ export const useAppStore = defineStore("app", () => {
                 })
             });
 
-            if (response.status >= 400) {
-                this.setDefault();
-                return false;
-            }
-
             result = await response.data;
 
             for (let field in ob) {
                 ob[field].setData(result[field]);
             }
         } catch(e) {
+            this.isForbidden = true;
+            if (e instanceof AxiosError) {
+                const response = JSON.parse(e.request.response);
+                this.errorMessage = `Статус[${e.request.status}]: ${response.message}`;
+            } else {
+            }
         } finally {
             this.isRequest = false;
             return result;
         }
     };
     
-    return { token, aud, isGuest, isRequest, setData, request }
+    return { token, aud, isGuest, isRequest, isForbidden, errorMessage, setData, request }
 });
