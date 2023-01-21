@@ -2,10 +2,12 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 
 import { setActivePinia, createPinia } from 'pinia';
-import router from "../../router";
-import App from "../../App.vue";
-import { useAppStore } from '../../stores/app';
-import { paginationCatalogStore, paginationAccountStore } from '../../stores/pagination';
+import router from "@/router";
+import App from "@/App.vue";
+import ForbiddenModal from '@/components/ForbiddenModal.vue';
+import AlertAuthentication from '@/components/AlertAuthentication.vue';
+import { useAppStore } from '@/stores/app';
+import { paginationCatalogStore, paginationAccountStore } from '@/stores/pagination';
 
 describe("App", () => {
     beforeEach(() => {
@@ -44,6 +46,11 @@ describe("App", () => {
         expect(mainNav.find('a[href="/login').exists()).toBe(true);
         expect(mainNav.text()).not.toContain('Выход');
         expect(mainNav.find('a[href="/logout').exists()).toBe(false);
+        
+        // Баннер с призывом залогиниться присутствует
+        expect(wrapper.findComponent(AlertAuthentication).exists()).toBe(true);
+        // Модальное окно ошибок отсутствует
+        expect(wrapper.findComponent(ForbiddenModal).exists()).toBe(false);
     });
     
     it("Проверка меню для аутентифицированного пользователя", () => {
@@ -74,5 +81,28 @@ describe("App", () => {
         expect(mainNav.find('a[href="/login').exists()).toBe(false);
         expect(mainNav.text()).toContain('Выход');
         expect(mainNav.find('a[href="/logout').exists()).toBe(true);
+        
+        // Баннер с призывом залогиниться отсутствует
+        expect(wrapper.findComponent(AlertAuthentication).exists()).toBe(false);
+        // Модальное окно ошибок отсутствует
+        expect(wrapper.findComponent(ForbiddenModal).exists()).toBe(false);
+    });
+    
+    it("Проверка наличия модального окна ошибок", () => {
+        const app = useAppStore();
+        const paginationCatalog = paginationCatalogStore();
+        const paginationAccount = paginationAccountStore();
+        
+        // Перехвачена ошибка
+        app.isForbidden = true;
+        
+        const wrapper = mount(App, {
+            global: {
+                provide: { app, paginationCatalog, paginationAccount },
+                plugins: [router]
+            }
+        });
+        // Модальное окно ошибок присутствует
+        expect(wrapper.findComponent(ForbiddenModal).exists()).toBe(true);
     });
 });
