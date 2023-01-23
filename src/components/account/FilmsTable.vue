@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import FilmRemoveModal from './FilmRemoveModal.vue';
-import type { Films } from '../../stores/films';
-import type { Pagination } from '../../stores/pagination';
+import FilmRemoveModal from '@/components/account/FilmRemoveModal.vue';
+import type { Films } from '@/stores/films';
+import type { Pagination } from '@/stores/pagination';
 
 const router = useRouter();
 const route = useRoute();

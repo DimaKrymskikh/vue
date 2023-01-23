@@ -35,7 +35,6 @@ describe("catalog/FilmsTable", () => {
         
         const wrapper = mount(FilmsTable, {
             props: {
-                requestCatalog: vi.fn(),
                 goToFirstPage: vi.fn()
             },
             global: {

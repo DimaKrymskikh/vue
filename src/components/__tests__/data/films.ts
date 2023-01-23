@@ -32,5 +32,26 @@ export const firstPage = {
             "elementsNumberOnActivePage":20
         }
     }
-}
+};
 
+export const accountPage = {
+    data: {
+        "films": [
+            {"id":965,"n":41,"count":46,"title":"Watership Frontier","description":"A Emotional Yarn of a Boat And a Crocodile who must Meet a Moose in Soviet Georgia","name":"English             ","isAvailable":true},
+            {"id":974,"n":42,"count":46,"title":"Wild Apollo","description":"A Beautiful Story of a Monkey And a Sumo Wrestler who must Conquer a A Shark in A MySQL Convention","name":"English             ","isAvailable":true},
+            {"id":984,"n":43,"count":46,"title":"Wonderful Drop","description":"A Boring Panorama of a Woman And a Madman who must Overcome a Butler in A U-Boat","name":"English             ","isAvailable":true},
+            {"id":985,"n":44,"count":46,"title":"Wonderland Christmas","description":"A Awe-Inspiring Character Study of a Waitress And a Car who must Pursue a Mad Scientist in The First Manned Space Station","name":"English             ","isAvailable":true},
+            {"id":987,"n":45,"count":46,"title":"Words Hunter","description":"A Action-Packed Reflection of a Composer And a Mad Scientist who must Face a Pioneer in A MySQL Convention","name":"English             ","isAvailable":true},
+            {"id":996,"n":46,"count":46,"title":"Young Language","description":"A Unbelieveable Yarn of a Boat And a Database Administrator who must Meet a Boy in The First Manned Space Station","name":"English             ","isAvailable":true}
+        ],
+        "pagination": {
+            "activePage":3,
+            "itemsNumberOnPage":20,
+            "itemsNumberTotal":46,
+            "pagesNumber":3,
+            "firstButton":1,
+            "lastButton":3,
+            "elementsNumberOnActivePage":6
+        }
+    }
+};
