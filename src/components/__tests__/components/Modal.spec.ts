@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 
-import Modal from "../../../components/Modal.vue";
+import Modal from "@/components/Modal.vue";
 
 describe("Modal", () => {
     it("Монтирование компоненты при isRequest = false", async () => {

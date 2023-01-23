@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 
-import Dropdown from "../../../components/Dropdown.vue";
+import Dropdown from "@/components/Dropdown.vue";
 
 describe("Dropdown", () => {
     it("Монтирование компоненты, выпадение/сокрытие списка", async () => {
@@ -33,7 +33,7 @@ describe("Dropdown", () => {
         expect(li[1].text()).toBe('20');
         expect(li[1].attributes('data-number')).toBe('20');
         expect(li[1].classes('select')).toBe(false);
-        // Третий вариант не выбран
+        // Третий вариант выбран
         expect(li[2].text()).toBe('50');
         expect(li[2].attributes('data-number')).toBe('50');
         expect(li[2].classes('select')).toBe(true);

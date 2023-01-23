@@ -1,18 +1,18 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mount, flushPromises } from "@vue/test-utils";
 import type { Mock } from "vitest";
 
 import { setActivePinia, createPinia } from 'pinia';
-import CatalogView from "../../../views/CatalogView.vue";
-import FilmsTable from '../../../components/catalog/FilmsTable.vue';
-import BreadCrumb from '../../../components/BreadCrumb.vue';
-import PaginationNav from '../../../components/PaginationNav.vue';
-import Dropdown from '../../../components/Dropdown.vue';
-import Spinner from '../../../components/Spinner.vue';
-import router from "../../../router";
-import { useAppStore } from '../../../stores/app';
-import { filmsCatalogStore } from '../../../stores/films';
-import { paginationCatalogStore } from '../../../stores/pagination';
+import CatalogView from "@/views/CatalogView.vue";
+import FilmsTable from '@/components/catalog/FilmsTable.vue';
+import BreadCrumb from '@/components/BreadCrumb.vue';
+import PaginationNav from '@/components/PaginationNav.vue';
+import Dropdown from '@/components/Dropdown.vue';
+import Spinner from '@/components/Spinner.vue';
+import router from "@/router";
+import { useAppStore } from '@/stores/app';
+import { filmsCatalogStore } from '@/stores/films';
+import { paginationCatalogStore } from '@/stores/pagination';
 import { firstPage } from './data/films';
 
 import axios from 'axios';

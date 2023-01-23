@@ -48,7 +48,9 @@ export const useAppStore = defineStore("app", () => {
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify({
+                    // Всегда отправляется токен
                     token: this.token,
+                    // Всегда отправляется id клиентского приложения
                     aud,
                     ...data
                 })

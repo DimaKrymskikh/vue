@@ -9,8 +9,7 @@ const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
 const paginationCatalog = inject('paginationCatalog') as Pagination;
 
-const { requestCatalog, goToFirstPage } = defineProps<{
-    requestCatalog: Function,
+const { goToFirstPage } = defineProps<{
     goToFirstPage: Function
 }>();
 

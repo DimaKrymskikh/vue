@@ -85,7 +85,7 @@ watch(
             :changeNumber="changeNumberOfFilmsOnPage"
             :buttonName="'Число фильмов на странице'"/>
     </div>
-    <FilmsTable :requestCatalog="requestCatalog" :goToFirstPage="goToFirstPage"/>
+    <FilmsTable :goToFirstPage="goToFirstPage"/>
     <PaginationNav :routeName="'catalog'" :pagination="paginationCatalog"/>
 </template>
 </template>

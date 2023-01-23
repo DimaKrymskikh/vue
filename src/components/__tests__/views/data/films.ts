@@ -3,7 +3,7 @@ export const firstPage = {
         "films": [
             {"id":1,"n":1,"count":1000,"title":"Academy Dinosaur","description":"A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies","name":"English             ","isAvailable":false},
             {"id":2,"n":2,"count":1000,"title":"Ace Goldfinger","description":"A Astounding Epistle of a Database Administrator And a Explorer who must Find a Car in Ancient China","name":"English             ","isAvailable":false},
-            {"id":3,"n":3,"count":1000,"title":"Adaptation Holes","description":"A Astounding Reflection of a Lumberjack And a Car who must Sink a Lumberjack in A Baloon Factory","name":"English             ","isAvailable":false},
+            {"id":3,"n":3,"count":1000,"title":"Adaptation Holes","description":"A Astounding Reflection of a Lumberjack And a Car who must Sink a Lumberjack in A Baloon Factory","name":"English             ","isAvailable":true},
             {"id":4,"n":4,"count":1000,"title":"Affair Prejudice","description":"A Fanciful Documentary of a Frisbee And a Lumberjack who must Chase a Monkey in A Shark Tank","name":"English             ","isAvailable":false},
             {"id":5,"n":5,"count":1000,"title":"African Egg","description":"A Fast-Paced Documentary of a Pastry Chef And a Dentist who must Pursue a Forensic Psychologist in The Gulf of Mexico","name":"English             ","isAvailable":false},
             {"id":6,"n":6,"count":1000,"title":"Agent Truman","description":"A Intrepid Panorama of a Robot And a Boy who must Escape a Sumo Wrestler in Ancient China","name":"English             ","isAvailable":false},
