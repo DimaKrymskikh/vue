@@ -7,7 +7,7 @@ import FilmsTable from '@/components/catalog/FilmsTable.vue';
 import { useAppStore } from '@/stores/app';
 import { filmsCatalogStore } from '@/stores/films';
 import { paginationCatalogStore } from '@/stores/pagination';
-import { firstPage } from '../../views/data/films';
+import { firstPage } from '../../data/films';
 
 import axios, { AxiosError } from 'axios';
 //import AxiosError from 'axios-error';

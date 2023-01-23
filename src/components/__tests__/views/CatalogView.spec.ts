@@ -13,7 +13,7 @@ import router from "@/router";
 import { useAppStore } from '@/stores/app';
 import { filmsCatalogStore } from '@/stores/films';
 import { paginationCatalogStore } from '@/stores/pagination';
-import { firstPage } from './data/films';
+import { firstPage } from '../data/films';
 
 import axios from 'axios';
 vi.mock('axios');
