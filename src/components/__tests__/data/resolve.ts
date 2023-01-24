@@ -1,6 +1,5 @@
 export const removeFilm = {
     data: {
-        "id": 985, 
         "title": "Wonderland Christmas"
     }
 };
