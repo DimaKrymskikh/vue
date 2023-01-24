@@ -8,9 +8,9 @@ import { useAppStore } from '@/stores/app';
 import { filmsCatalogStore } from '@/stores/films';
 import { paginationCatalogStore } from '@/stores/pagination';
 import { firstPage } from '../../data/films';
+import { errorTokenTimeout } from '../../data/reject';
 
 import axios, { AxiosError } from 'axios';
-//import AxiosError from 'axios-error';
 vi.mock('axios');
 
 describe("catalog/FilmsTable", () => {
@@ -98,18 +98,11 @@ describe("catalog/FilmsTable", () => {
         paginationCatalog.itemsNumberTotal = firstPage.data.pagination.itemsNumberTotal;
         paginationCatalog.elementsNumberOnActivePage = firstPage.data.pagination.elementsNumberOnActivePage;
         
-        // Формируем ошибку
-        const axiosError = new AxiosError();
-        axiosError.request = {
-                    response: '{"message": "Время токена истекло"}',
-                    status: 401
-                };
-        
         // Задаём mock-функции
         const appRequst = vi.spyOn(app, 'request');
         await (axios as any as Mock)
             .mockResolvedValueOnce(true)
-            .mockRejectedValueOnce(axiosError);
+            .mockRejectedValueOnce(errorTokenTimeout());
         
         const wrapper = mount(FilmsTable, {
             props: {

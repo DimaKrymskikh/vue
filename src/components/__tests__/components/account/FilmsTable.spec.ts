@@ -10,7 +10,7 @@ import { filmsAccountStore } from '@/stores/films';
 import { paginationAccountStore } from '@/stores/pagination';
 import { accountPage } from '../../data/films';
 
-describe("catalog/FilmsTable", () => {
+describe("account/FilmsTable", () => {
     beforeEach(() => {
         setActivePinia(createPinia());
     });

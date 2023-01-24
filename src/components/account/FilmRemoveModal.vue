@@ -101,7 +101,7 @@ const handlerRemoveFilm = async function(e: Event) {
     <template v-slot:body>
         Вы действительно хотите удалить фильм 
         <Spinner :hSpinner="'h-4'" class="inline-block" v-if="isRequest"/>
-        <span id="remove-film-name" v-else>{{removeFilmName}}</span>?
+        <span v-else>{{removeFilmName}}</span>?
         <div class="mb-3">
             <label>Введите пароль: 
                 <Spinner :hSpinner="'h-8'" class="flex justify-center" v-if="isRequest"/>

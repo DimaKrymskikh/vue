@@ -17,20 +17,20 @@ export interface Pagination {
 const paginationModel = function() {
     // Активная страница
     // По умолчанию нужно использовать 1 (а не 0), чтобы правильно определялась активная страница при первом посещении
-    const activePage = ref(1 as number);
+    const activePage = 1;
     // Число элементов на странице
-    const itemsNumberOnPage = ref(0 as number);
+    const itemsNumberOnPage = 0;
     // Общее число элементов в списке
-    const itemsNumberTotal = ref(0 as number);
+    const itemsNumberTotal = 0;
     // Число страниц в списке
-    const pagesNumber = ref(0 as number);
+    const pagesNumber = 0;
     // Номер первой кнопки 
-    const firstButton = ref(0 as number);
+    const firstButton = 0;
     // Номер последней кнопки 
-    const lastButton = ref(0 as number);
+    const lastButton = 0;
     // Число элементов на активной странице
     // Если активная страница - последняя страница, то elementsNumberOnActivePage может быть меньше itemsNumberOnPage
-    const elementsNumberOnActivePage = ref(0 as number);
+    const elementsNumberOnActivePage = 0;
 
     /**
      * Изменяет свойства пагинации
