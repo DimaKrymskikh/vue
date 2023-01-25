@@ -15,3 +15,16 @@ export const wrongPasswordError = {
         errors: ['Попробуйте ввести пароль ещё раз'] 
     }
 };
+
+export const removeAccount = {
+    data: {
+        errors: [],
+        app: {
+            token: 'LogoutToken',
+            isGuest: true
+        },
+        user: {
+            login: ''
+        }
+    }
+};

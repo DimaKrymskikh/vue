@@ -13,7 +13,7 @@ import { paginationAccountStore } from '@/stores/pagination';
 import { removeFilm, notErrors, wrongPasswordError } from '../../data/resolve';
 import { errorTokenTimeout } from '../../data/reject';
 
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 vi.mock('axios');
 
 /**
@@ -42,9 +42,11 @@ const openModal = async function(wrapper: VueWrapper) {
 
     // Кликаем по кнопке "Да"
     await buttons[2].trigger('click');
+    // Появляется спиннер 
+    expect(wrapper.findComponent(Spinner).exists()).toBe(true);
 }
 
-describe("catalog/FilmsTable", () => {
+describe("account/FilmRemoveModal", () => {
     beforeEach(() => {
         setActivePinia(createPinia());
     });
