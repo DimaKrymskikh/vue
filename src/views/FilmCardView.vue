@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { inject } from 'vue';
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import Spinner from '@/components/Spinner.vue';
 import type { App } from '@/stores/app';
 import type { Film } from '@/stores/film';
 import type { Pagination } from '@/stores/pagination';
-
+        
+const app = inject('app') as App;
 const paginationAccount = inject('paginationAccount') as Pagination;
+const filmCard = inject('filmCard') as Film;
 
 const linksList = [{
                 link: '/',
@@ -18,11 +20,7 @@ const linksList = [{
             }, {
                 text: 'Карточка фильма'
             }];
-        
-const app = inject('app') as App;
-const filmCard = inject('filmCard') as Film;
 
-const router = useRouter();
 const route = useRoute();
     
 async function requestFilmCard() {

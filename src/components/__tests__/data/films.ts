@@ -55,3 +55,16 @@ export const accountPage = {
         }
     }
 };
+
+export const filmCard20 = {
+    data: {
+        "film": {
+            "filmId": 20,
+            "title": "Amelie Hellfighters",
+            "description": "A Boring Drama of a Woman And a Squirrel who must Conquer a Student in A Baloon",
+            "releaseYear": 2006,
+            "actorNames": ["Carmen Hunt","Ed Mansfield","Ewan Gooding","Ian Tandy","Laura Brody","Walter Torn"],
+            "language": "English"
+        }
+    }
+}

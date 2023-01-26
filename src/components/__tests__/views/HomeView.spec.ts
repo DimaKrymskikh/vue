@@ -2,9 +2,9 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 
 import { setActivePinia, createPinia } from 'pinia';
-import HomeView from "../../../views/HomeView.vue";
-import Spinner from '../../../components/Spinner.vue';
-import { useAppStore } from '../../../stores/app';
+import HomeView from "@/views/HomeView.vue";
+import Spinner from '@/components/Spinner.vue';
+import { useAppStore } from '@/stores/app';
 
 describe("HomeView", () => {
     beforeEach(() => {

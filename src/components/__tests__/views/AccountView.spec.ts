@@ -17,7 +17,7 @@ import { filmsAccountStore } from '@/stores/films';
 import { paginationAccountStore } from '@/stores/pagination';
 import { accountPage } from '../data/films';
 
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 vi.mock('axios');
 
 describe("AccountView", () => {
