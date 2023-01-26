@@ -28,3 +28,15 @@ export const removeAccount = {
         }
     }
 };
+
+export const logoutData = {
+    data: {
+        app: {
+            token: 'LogoutToken',
+            isGuest: true
+        },
+        user: {
+            login: ''
+        }
+    }
+};
