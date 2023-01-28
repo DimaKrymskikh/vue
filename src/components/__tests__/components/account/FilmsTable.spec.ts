@@ -59,4 +59,119 @@ describe("account/FilmsTable", () => {
         // Появляется модальное окно удаления фильма
         expect(wrapper.findComponent(FilmRemoveModal).exists()).toBe(true);
     });
+    
+    it("Фильтрация фильмов", async () => {
+        // Определяем provide
+        const app = useAppStore();
+        const filmsAccount = filmsAccountStore();
+        const paginationAccount = paginationAccountStore;
+        
+        // Задаём mock-функции
+        const goToFirstPage = vi.fn();
+        
+        const wrapper = mount(FilmsTable, {
+            props: {
+                requestAccount: vi.fn(),
+                goToFirstPage
+            },
+            global: {
+                provide: { app, filmsAccount, paginationAccount },
+            }
+        });
+        
+        // Находим поля фильтрации
+        const inputs = wrapper.findAll('input[type="text"]');
+        expect(inputs.length).toBe(2);
+        const inputTitle = inputs[0].element as HTMLInputElement;
+        const inputDescription = inputs[1].element as HTMLInputElement;
+        // В начальный момент поля не заполнены
+        expect(inputTitle.value).toBe('');
+        expect(inputDescription.value).toBe('');
+        expect(filmsAccount.sortFilmTitle).toBe('');
+        expect(filmsAccount.sortFilmDescription).toBe('');
+        
+        // Нажимается клавиша 'a' в поле title
+        await inputs[0].trigger('keyup', { key: 'a' })
+        // Запрос не отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(0);
+        // Нажимается клавиша 'Enter'
+        await inputs[0].trigger('keyup', { key: 'Enter' })
+        // Запрос отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(1);
+        // Сбрасываем счётчик числа отправок goToFirstPage
+        goToFirstPage.mockClear();
+        // Нажимается клавиша 'g' в поле description
+        await inputs[1].trigger('keyup', { key: 'g' })
+        // Запрос не отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(0);
+        // Нажимается клавиша 'Enter'
+        await inputs[1].trigger('keyup', { key: 'Enter' })
+        // Запрос отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(1);
+        // Сбрасываем счётчик числа отправок goToFirstPage
+        goToFirstPage.mockClear();
+        
+        // Заполняем поле title
+        await inputs[0].setValue('abc');
+        expect(inputTitle.value).toBe('abc');
+        expect(inputDescription.value).toBe('');
+        expect(filmsAccount.sortFilmTitle).toBe('abc');
+        expect(filmsAccount.sortFilmDescription).toBe('');
+        
+        // Нажимается клавиша 's' в поле title
+        await inputs[0].trigger('keyup', { key: 's' })
+        // Запрос не отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(0);
+        // Нажимается клавиша 'Enter'
+        await inputs[0].trigger('keyup', { key: 'Enter' })
+        expect(goToFirstPage).toHaveBeenCalledTimes(1);
+        // Сбрасываем счётчик числа отправок goToFirstPage
+        goToFirstPage.mockClear();
+        
+        // Заполняем поле description
+        await inputs[0].setValue('');
+        await inputs[1].setValue('fghj');
+        expect(inputTitle.value).toBe('');
+        expect(inputDescription.value).toBe('fghj');
+        expect(filmsAccount.sortFilmTitle).toBe('');
+        expect(filmsAccount.sortFilmDescription).toBe('fghj');
+        
+        // Нажимается клавиша 'F' в поле description
+        await inputs[1].trigger('keyup', { key: 'F' })
+        // Запрос не отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(0);
+        // Нажимается клавиша 'Enter'
+        await inputs[1].trigger('keyup', { key: 'Enter' });
+        // Запрос отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(1);
+        // Сбрасываем счётчик числа отправок goToFirstPage
+        goToFirstPage.mockClear();
+        
+        // Заполняются оба поля
+        await inputs[0].setValue('Qh');
+        await inputs[1].setValue('Я ф');
+        expect(inputTitle.value).toBe('Qh');
+        expect(inputDescription.value).toBe('Я ф');
+        expect(filmsAccount.sortFilmTitle).toBe('Qh');
+        expect(filmsAccount.sortFilmDescription).toBe('Я ф');
+        
+        // Нажимается клавиша 'Ы' в поле title
+        await inputs[0].trigger('keyup', { key: 'Ы' })
+        // Запрос не отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(0);
+        // Нажимается клавиша 'Enter'
+        await inputs[0].trigger('keyup', { key: 'Enter' })
+        // Запрос отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(1);
+        // Сбрасываем счётчик числа отправок goToFirstPage
+        goToFirstPage.mockClear();
+        // Нажимается клавиша 'м' в поле description
+        await inputs[1].trigger('keyup', { key: 'м' })
+        // Запрос не отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(0);
+        // Нажимается клавиша 'Enter'
+        await inputs[1].trigger('keyup', { key: 'Enter' })
+        // Запрос отправлен
+        expect(goToFirstPage).toHaveBeenCalledTimes(1);
+    });
 });

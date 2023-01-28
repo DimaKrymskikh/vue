@@ -83,27 +83,4 @@ describe("Хранилище film", () => {
         expect(filmsAccount.films[0].id).toBe(943);
         expect(filmsAccount.films[1].title).toBe("Wonderful Drop");
     });
-    
-    it("Применение setSortFilmTitle и setSortFilmDescription", () => {
-        const filmsCatalog = filmsCatalogStore();
-        const filmsAccount = filmsAccountStore();
-        // Дефолтные значения
-        expect(filmsCatalog.sortFilmTitle).toBe('');
-        expect(filmsCatalog.sortFilmDescription).toBe('');
-        expect(filmsAccount.sortFilmTitle).toBe('');
-        expect(filmsAccount.sortFilmDescription).toBe('');
-        // Изменяем filmsCatalog
-        filmsCatalog.setSortFilmTitle('123');
-        filmsCatalog.setSortFilmDescription('abc');
-        // Изменяем filmsAccount
-        filmsAccount.setSortFilmTitle('$');
-        filmsAccount.setSortFilmDescription('Яя');
-        // Получаем разные хранилища
-        // filmsCatalog
-        expect(filmsCatalog.sortFilmTitle).toBe('123');
-        expect(filmsCatalog.sortFilmDescription).toBe('abc');
-        // filmsAccount
-        expect(filmsAccount.sortFilmTitle).toBe('$');
-        expect(filmsAccount.sortFilmDescription).toBe('Яя');
-    });
 });

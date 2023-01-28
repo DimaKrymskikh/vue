@@ -15,37 +15,25 @@ export interface Films {
     sortFilmTitle: string;
     sortFilmDescription: string;
     setData: Function;
-    setSortFilmTitle: Function;
-    setSortFilmDescription: Function;
 }
 
 const filmsModel = function() {
     // Массив объектов (список фильмов), свойства которых определяет сервер
-    const films = ref([] as Array<Film>);
+    const films = [] as Array<Film>;
     // Фильтр по названию фильма
-    const sortFilmTitle = ref('' as string);
+    const sortFilmTitle = '';
     // Фильтр по описанию фильма
-    const sortFilmDescription = ref('' as string);
+    const sortFilmDescription = '';
     // Обновляет список фильмов
     const setData = function(this: Films, data: Array<Film>) {
         this.films = data;
-    };
-    // Изменяет фильтр по названию фильма
-    const setSortFilmTitle = function(this: Films, text: string) {
-        this.sortFilmTitle = text;
-    };
-    // Изменяет фильтр по описанию фильма
-    const setSortFilmDescription = function(this: Films, text: string) {
-        this.sortFilmDescription = text;
     };
     
     return { 
         films,
         sortFilmTitle,
         sortFilmDescription,
-        setData,
-        setSortFilmTitle,
-        setSortFilmDescription
+        setData
     };
 }
 
