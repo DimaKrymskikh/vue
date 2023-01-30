@@ -76,6 +76,7 @@ describe("account/FilmsTable", () => {
             },
             global: {
                 provide: { app, filmsAccount, paginationAccount },
+                plugins: [router]
             }
         });
         
