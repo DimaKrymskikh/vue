@@ -66,7 +66,7 @@ async function handlerLogin(e: Event) {
             Пароль:
             <input type="password" name="password" v-model="inputPassword" />
         </InputLabel>
-        <div class="mb-3 w-1/3 text-right">
+        <div class="mb-3 w-1/3 pr-4 text-right">
             <button
                 id="login-button"
                 class="p-1 w-36 rounded-lg"

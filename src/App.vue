@@ -21,22 +21,22 @@ const paginationAccount = inject('paginationAccount') as Pagination;
     <nav id="main-nav" class="bg-orange-300 shadow shadow-orange-200">
         <div class="lg:container">
             <ul class="flex flex-row">
-                <li class="px-2 h-10 flex">
+                <li class="px-2 h-12 flex">
                     <RouterLink class="self-center" to="/">
                         <HouseSvg />
                     </RouterLink>
                 </li>
                 <li class="nav-tab">
-                    <RouterLink class="nav-link" :to="{name: 'catalog', params: { pageId: paginationCatalog.activePage }}">Каталог</RouterLink>
+                    <RouterLink class="nav-link small-caps" :to="{name: 'catalog', params: { pageId: paginationCatalog.activePage }}">каталог</RouterLink>
                 </li>
                 <li class="nav-tab" v-if="!app.isGuest">
-                    <RouterLink class="nav-link" :to="{name: 'account', params: { pageId: paginationAccount.activePage }}">ЛК</RouterLink>
+                    <RouterLink class="nav-link small-caps" :to="{name: 'account', params: { pageId: paginationAccount.activePage }}">лк</RouterLink>
                 </li>
                 <li class="nav-tab" v-if="app.isGuest">
-                    <RouterLink class="nav-link" to="/login">Вход</RouterLink>
+                    <RouterLink class="nav-link small-caps" to="/login">вход</RouterLink>
                 </li>
                 <li class="nav-tab" v-if="!app.isGuest">
-                    <RouterLink class="nav-link" to="/logout">Выход</RouterLink>
+                    <RouterLink class="nav-link small-caps" to="/logout">выход</RouterLink>
                 </li>
             </ul>
         </div>

@@ -27,7 +27,7 @@
         @apply border border-slate-300 p-1;
     }
     input {
-        @apply bg-orange-50 border border-orange-300 focus:ring-orange-700 focus:border-orange-700 text-sm rounded-lg block w-full p-1;
+        @apply bg-orange-50 border border-orange-300 focus:ring-orange-700 focus:border-orange-700 text-sm rounded-lg block w-full px-4 py-2;
     }
     td {
         @apply border border-slate-300 p-1;
@@ -49,6 +49,9 @@
     }
     .stop-event {
         @apply cursor-not-allowed;
+    }
+    .small-caps {
+        font-variant-caps: small-caps;
     }
 }
 

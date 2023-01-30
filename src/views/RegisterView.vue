@@ -121,7 +121,7 @@ async function handlerRegistration(e: Event) {
             Подтверждение пароля:
             <input type="password" name="verification" v-model="inputVerification" />
         </InputLabel>
-        <div class="mb-3 w-1/3 text-right">
+        <div class="mb-3 w-1/3 pr-4 text-right">
             <button
                 id="register-button"
                 class="p-1 w-48 rounded-lg"

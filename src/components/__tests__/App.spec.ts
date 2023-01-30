@@ -36,15 +36,15 @@ describe("App", () => {
         // Вкладка главной страницы (svg, нет текста)
         expect(mainNav.find('#house-svg').isVisible()).toBe(true);
         expect(mainNav.find('a[href="/"').isVisible()).toBe(true);
-        expect(mainNav.text()).toContain('Каталог');
+        expect(mainNav.text()).toContain('каталог');
         // paginationCatalog.activePage = 2
         expect(mainNav.find('a[href="/catalog/2').exists()).toBe(true);
-        expect(mainNav.text()).not.toContain('ЛК');
+        expect(mainNav.text()).not.toContain('лк');
         // paginationAccount.activePage = 1
         expect(mainNav.find('a[href="/account/1').exists()).toBe(false);
-        expect(mainNav.text()).toContain('Вход');
+        expect(mainNav.text()).toContain('вход');
         expect(mainNav.find('a[href="/login').exists()).toBe(true);
-        expect(mainNav.text()).not.toContain('Выход');
+        expect(mainNav.text()).not.toContain('выход');
         expect(mainNav.find('a[href="/logout').exists()).toBe(false);
         
         // Баннер с призывом залогиниться присутствует
@@ -73,13 +73,13 @@ describe("App", () => {
         
         expect(mainNav.find('#house-svg').isVisible()).toBe(true);
         expect(mainNav.find('a[href="/"').isVisible()).toBe(true);
-        expect(mainNav.text()).toContain('Каталог');
+        expect(mainNav.text()).toContain('каталог');
         expect(mainNav.find('a[href="/catalog/4').exists()).toBe(true);
-        expect(mainNav.text()).toContain('ЛК');
+        expect(mainNav.text()).toContain('лк');
         expect(mainNav.find('a[href="/account/7').exists()).toBe(true);
-        expect(mainNav.text()).not.toContain('Вход');
+        expect(mainNav.text()).not.toContain('вход');
         expect(mainNav.find('a[href="/login').exists()).toBe(false);
-        expect(mainNav.text()).toContain('Выход');
+        expect(mainNav.text()).toContain('выход');
         expect(mainNav.find('a[href="/logout').exists()).toBe(true);
         
         // Баннер с призывом залогиниться отсутствует
