@@ -8,7 +8,7 @@ export interface User {
 }
 
 export const useUserStore = defineStore("user", () => {
-    const login = ref('' as string); 
+    const login = ''; 
 
     function setData(this: User, data: User): void {
         for (let field in data) {
@@ -31,7 +31,7 @@ export const useUserStore = defineStore("user", () => {
         if (text.length < 4 || text.length > 18) {
             errors.push('Логин должен состоять из 4 - 18 символов.');
         }
-        var matches = /(\W)/.exec(text);
+        let matches = /(\W)/.exec(text);
         if (matches) {
             errors.push(`Логин не должен содержать символ '#'.`.replace('#', matches[1]));
         }

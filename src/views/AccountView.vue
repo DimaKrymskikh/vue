@@ -30,6 +30,9 @@ const user = inject('user') as User;
 const filmsAccount = inject('filmsAccount') as Films;
 const paginationAccount = inject('paginationAccount') as Pagination;
 
+const title = `${user.login}. Личный кабинет`;
+document.title = title;
+
 // Отслеживает открытие модального окна для удаления аккаунта
 const isShowAccountRemoveModal = ref(false)
 
@@ -85,7 +88,7 @@ watch(
 
 <template>
 <BreadCrumb :linksList="linksList" />
-<h1>{{user.login}}. Личный кабинет</h1>
+<h1>{{title}}</h1>
 
 <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
 <template v-else>

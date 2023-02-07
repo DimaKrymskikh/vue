@@ -27,6 +27,9 @@ const app = inject('app') as App;
 const filmsCatalog = inject('filmsCatalog') as Films;
 const paginationCatalog = inject('paginationCatalog') as Pagination;
 
+const title = 'Каталог';
+document.title = title;
+
 // Запрос на получение списка фильмов
 const requestCatalog = async function() {
     // Запрос на сервер для получения списка фильмов и параметров пагинации
@@ -74,7 +77,7 @@ watch(
 
 <template>
 <BreadCrumb :linksList="linksList" />
-<h1>Каталог</h1>
+<h1>{{title}}</h1>
 
 <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
 <template v-else>

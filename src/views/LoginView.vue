@@ -18,6 +18,9 @@ const linksList = [{
 const app = inject('app') as App;
 const user = inject('user') as User;
 
+const title = 'Вход';
+document.title = title;
+
 const inputLogin = ref('');
 const inputPassword = ref('');
 const errors = ref([]);
@@ -54,7 +57,7 @@ async function handlerLogin(e: Event) {
 
 <template>
     <BreadCrumb :linksList="linksList" />
-    <h1>Вход</h1>
+    <h1>{{title}}</h1>
     
     <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>

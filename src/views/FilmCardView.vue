@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import { ref, inject } from 'vue';
 import { useRoute } from 'vue-router'
 import BreadCrumb from '@/components/BreadCrumb.vue';
 import Spinner from '@/components/Spinner.vue';
@@ -22,9 +22,13 @@ const linksList = [{
             }];
 
 const route = useRoute();
-    
+
+const title = ref('');
+
 async function requestFilmCard() {
     await app.request(`account/filmCard/${route.params.filmId}`, 'POST', {}, {film: filmCard});
+    title.value = filmCard.title;
+    document.title = title.value;
 };
 
 requestFilmCard();
@@ -35,7 +39,7 @@ requestFilmCard();
     
     <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>
-        <h1>{{filmCard.title}}</h1>
+        <h1>{{title}}</h1>
         <div class="flex">
             <div class="w-1/4 pr-4">
                 <h3>Основная информация</h3>

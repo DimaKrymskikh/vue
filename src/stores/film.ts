@@ -2,28 +2,28 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export interface Film {
-    filmId?: number;
-    title?: string;
-    description?: string;
-    releaseYear?: number;
-    actorNames?: Array<string>;
-    language?: string;
+    filmId: number;
+    title: string;
+    description: string;
+    releaseYear: number;
+    actorNames: Array<string>;
+    language: string;
     [index: string]: any;
 }
 
 const filmModel = function() {
     // id фильма
-    let filmId;
+    const filmId = 0;
     // Название
-    let title;
+    const title = '';
     // Описание фильма
-    let description;
+    const description = '';
     // Год выхода фильма
-    let releaseYear;
+    const releaseYear = 0;
     // Список актёров
-    let actorNames;
+    const actorNames = [] as Array<string>;
     // Язык, на котором снят фильм
-    let language;
+    const language = '';
 
     /**
      * Изменяет свойства фильма

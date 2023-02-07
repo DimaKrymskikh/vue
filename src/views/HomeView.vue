@@ -9,10 +9,13 @@ const linksList = [{
         }];
 
 const app = inject('app') as App;
+
+const title = 'Главная страница';
+document.title = title;
 </script>
 
 <template>
     <BreadCrumb :linksList="linksList" />
-    <h1>Главная страница</h1>
+    <h1>{{title}}</h1>
     <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
 </template>

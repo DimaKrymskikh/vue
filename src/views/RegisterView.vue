@@ -21,6 +21,9 @@ const linksList = [{
 const app = inject('app') as App;
 const user = inject('user') as User;
 
+const title = 'Регистрация';
+document.title = title;
+
 const inputLogin = ref('');
 const login = computed(() => {
     let text = inputLogin.value;
@@ -105,7 +108,7 @@ async function handlerRegistration(e: Event) {
 
 <template>
     <BreadCrumb :linksList="linksList" />
-    <h1>Регистрация</h1>
+    <h1>{{title}}</h1>
     
     <Spinner class="flex justify-center" :hSpinner="'h-96'" v-if="app.isRequest" />
     <template v-else>

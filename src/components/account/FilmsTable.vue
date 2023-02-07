@@ -73,7 +73,7 @@ const toggleShowFilmRemoveModal = function() {
         </tr>
     </thead>
     <tbody>
-        <tr v-for="(item) in filmsAccount.films">
+        <tr v-for="(item) in filmsAccount.films" class="hover:bg-green-300">
             <td>{{item.n}}</td>
             <td>{{item.title}}</td>
             <td>{{item.description}}</td>
